@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.FlxCamera;
+import openfl.utils.Assets;
 
 #if mobile
 import flixel.input.touch.FlxTouch;
@@ -14,6 +15,7 @@ import flixel.input.touch.FlxTouch;
  * 
  * Improved by: StarNova (Cream.BR)
  */
+ 
 class PauseButton
 {
     private static var instance:PauseButton;
@@ -27,6 +29,8 @@ class PauseButton
             instance = new PauseButton();
         return instance;
     }
+    
+    private function new() {}
     
     public static function showPauseButtonOnCamera(camera:FlxCamera, ?parent:FlxGroup, ?onClick:Void->Void):Void 
     {
