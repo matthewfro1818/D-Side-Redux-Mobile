@@ -428,6 +428,7 @@ class PlayState extends MusicBeatState
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
+	#if mobile public var camPause:FlxCamera; #end
 	public var cameraSpeed:Float = 1;
 	
 	public var defaultScoreAddition:Bool = true;
@@ -678,13 +679,16 @@ class PlayState extends MusicBeatState
 		camGame = new FlxCameraEx();
 		camHUD = new FlxCameraEx();
 		camOther = new FlxCameraEx();
+		#if mobile camPause = new FlxCameraEx(); #end
 		
 		camHUD.bgColor = 0x0;
 		camOther.bgColor = 0x0;
+		#if mobile camPause.bgColor = 0x0; #end
 		
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
+		#if mobile FlxG.cameras.add(camPause, false); #end
 		
 		grpNoteSplashes = new FlxTypedContainer<NoteSplash>();
 		
@@ -1237,6 +1241,12 @@ class PlayState extends MusicBeatState
 		}
 		
 		#if mobile hitbox.visible = true; #end
+		
+		#if mobile
+		mobile.backend.PauseButton.showPauseButtonOnCamera(camPause, null, function() {
+			if (scripts.call('onPause', []) != ScriptConstants.STOP_FUNC) openPauseMenu();
+		});
+	   #end
 		
 		inCutscene = false;
 		
@@ -1956,6 +1966,10 @@ class PlayState extends MusicBeatState
 		if (generatedMusic && !endingSong && !isCameraOnForcedPos) moveCameraSection();
 		
 		scripts.call('onUpdate', [elapsed]);
+		
+		#if mobile
+		mobile.backend.PauseButton.update();
+		#end
 		
 		super.update(elapsed);
 		
@@ -2874,6 +2888,10 @@ class PlayState extends MusicBeatState
 		updateTime = false;
 		
 		#if mobile hitbox.visible = false; #end
+		
+		#if mobile
+		mobile.backend.PauseButton.hidePauseButton();
+		#end
 		
 		deathCounter = 0;
 		seenCutscene = false;
