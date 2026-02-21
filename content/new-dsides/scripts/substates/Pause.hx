@@ -167,8 +167,8 @@ function onCreate() {
 	//virtualPad.buttonA.y = virtualPad.buttonB.y += 325;
 	FlxTween.tween(virtualPad.buttonUp, {alpha: 0.5, x: 0, y: FlxG.height - 255}, 0.3, {ease: FlxEase.quintOut, startDelay: (0.05 * 1)});
 	FlxTween.tween(virtualPad.buttonDown, {alpha: 0.5, x: 0, y: FlxG.height - 135}, 0.3, {ease: FlxEase.quintOut, startDelay: (0.05 * 2)});
-	FlxTween.tween(virtualPad.buttonA, {x: FlxG.width - 132}, 0.5, {ease: FlxEase.quintOut});
-	FlxTween.tween(virtualPad.buttonB, {x: FlxG.width - 258}, 0.5, {ease: FlxEase.quintOut});
+	FlxTween.tween(virtualPad.buttonA, {x: FlxG.width - 132}, 0.5, {ease: FlxEase.quintOut, startDelay: (0.05 * 1)});
+	FlxTween.tween(virtualPad.buttonB, {x: FlxG.width - 258}, 0.5, {ease: FlxEase.quintOut, startDelay: (0.05 * 2)});
 
 	FlxTimer.wait(0.5, () -> {
 		changeSelection(0);
