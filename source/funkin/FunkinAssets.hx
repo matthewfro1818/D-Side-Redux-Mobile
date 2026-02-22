@@ -24,6 +24,8 @@ import sys.io.File;
 class FunkinAssets
 {
 	static inline final MODS_PREFIX:String = 'content/';
+	static var assetPathLookup:Null<Map<String, String>> = null;
+	static var assetPathLookupCount:Int = -1;
 	
 	/**
 	 * Handles the caching of assets collected through `Paths` 
@@ -33,7 +35,50 @@ class FunkinAssets
 	static inline function normalizePath(path:String):String
 	{
 		if (path == null) return '';
-		return path.replace('\\', '/');
+		
+		var normalized = path.replace('\\', '/').trim();
+		
+		while (normalized.startsWith('./'))
+		{
+			normalized = normalized.substr(2);
+		}
+		
+		if (normalized.startsWith('/'))
+		{
+			normalized = normalized.substr(1);
+		}
+		
+		while (normalized.contains('//'))
+		{
+			normalized = normalized.replace('//', '/');
+		}
+		
+		return normalized;
+	}
+	
+	static function getAssetPathLookup():Map<String, String>
+	{
+		final list = Assets.list();
+		var lookup = assetPathLookup;
+		
+		if (lookup == null || assetPathLookupCount != list.length)
+		{
+			lookup = [];
+			assetPathLookupCount = list.length;
+			
+			for (assetPath in list)
+			{
+				final normalized = normalizePath(assetPath).toLowerCase();
+				if (!lookup.exists(normalized))
+				{
+					lookup.set(normalized, assetPath);
+				}
+			}
+			
+			assetPathLookup = lookup;
+		}
+		
+		return lookup;
 	}
 	
 	static function getAssetCandidates(path:String):Array<String>
@@ -69,7 +114,13 @@ class FunkinAssets
 		for (candidate in getAssetCandidates(path))
 		{
 			if (Assets.exists(candidate, type)) return candidate;
-			if (type != null && Assets.exists(candidate)) return candidate;
+			if (Assets.exists(candidate)) return candidate;
+			
+			final mappedPath = getAssetPathLookup().get(normalizePath(candidate).toLowerCase());
+			if (mappedPath == null) continue;
+			
+			if (Assets.exists(mappedPath, type)) return mappedPath;
+			if (Assets.exists(mappedPath)) return mappedPath;
 		}
 		
 		return null;
@@ -230,12 +281,14 @@ class FunkinAssets
 		{
 			var targetPrefix = normalizePath(prefix);
 			if (!targetPrefix.endsWith('/')) targetPrefix += '/';
+			final targetPrefixLower = targetPrefix.toLowerCase();
 			
 			for (path in Assets.list())
 			{
 				final normalizedPath = normalizePath(path);
+				final normalizedPathLower = normalizedPath.toLowerCase();
 				
-				if (!normalizedPath.startsWith(targetPrefix) || normalizedPath == targetPrefix) continue;
+				if (!normalizedPathLower.startsWith(targetPrefixLower) || normalizedPathLower == targetPrefixLower) continue;
 				
 				final remainder = normalizedPath.substr(targetPrefix.length);
 				final slashIndex = remainder.indexOf('/');
@@ -266,10 +319,11 @@ class FunkinAssets
 		{
 			var targetPrefix = normalizePath(prefix);
 			if (!targetPrefix.endsWith('/')) targetPrefix += '/';
+			final targetPrefixLower = targetPrefix.toLowerCase();
 			
 			for (path in Assets.list())
 			{
-				if (normalizePath(path).startsWith(targetPrefix)) return true;
+				if (normalizePath(path).toLowerCase().startsWith(targetPrefixLower)) return true;
 			}
 		}
 		

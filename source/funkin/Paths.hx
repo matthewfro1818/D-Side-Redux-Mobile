@@ -183,7 +183,7 @@ class Paths
 		
 		trace(songKey);
 		
-		if (ClientPrefs.streamedMusic) return FunkinAssets.getVorbisSound(songKey);
+		if (ClientPrefs.streamedMusic) return FunkinAssets.getVorbisSound(songKey) ?? FunkinAssets.getSoundUnsafe(songKey);
 		
 		return FunkinAssets.getSoundUnsafe(songKey);
 	}
@@ -199,7 +199,7 @@ class Paths
 		
 		songKey = findFileWithExts('songs/$songKey', ['ogg', 'wav'], null, checkMods);
 		
-		if (ClientPrefs.streamedMusic) return FunkinAssets.getVorbisSound(songKey);
+		if (ClientPrefs.streamedMusic) return FunkinAssets.getVorbisSound(songKey) ?? FunkinAssets.getSoundUnsafe(songKey);
 		
 		return FunkinAssets.getSoundUnsafe(songKey);
 	}
