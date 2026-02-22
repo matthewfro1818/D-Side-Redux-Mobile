@@ -6,9 +6,6 @@ import flixel.util.FlxDestroyUtil;
 import extensions.flixel.FlxCameraEx;
 import extensions.flixel.FlxSoundEx;
 
-#if mobile
-import mobile.backend.StorageSystem;
-#end
 import funkin.backend.MusicBeatState;
 import funkin.backend.MusicBeatSubstate;
 import funkin.scripting.ScriptConstants;

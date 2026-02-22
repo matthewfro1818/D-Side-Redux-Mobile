@@ -119,23 +119,6 @@ class Mods
 		'noteskins',
 	];
 	
-	/**
-	 * makes `modsList.txt` in the case it doesnt exist
-	 */
-	static function ensureModsListExists()
-	{
-		if (FunkinAssets.exists('modsList.txt')) return;
-		
-		try
-		{
-			File.saveContent('modsList.txt', '');
-		}
-		catch (e)
-		{
-			Logger.log('Could not create modsList.txt: $e', WARN);
-		}
-	}
-	
 	public static var globalMods:Array<String> = [];
 	
 	/**
@@ -330,7 +313,6 @@ class Mods
 	public static function updateModList(top:String = '')
 	{
 		#if MODS_ALLOWED
-		ensureModsListExists();
 		// Find all that are already ordered
 		var list = getListAsArray();
 		
@@ -341,14 +323,6 @@ class Mods
 		{
 			if (fileStr.length > 0) fileStr += '\n';
 			fileStr += values.folder + '|' + (values.enabled ? '1' : '0');
-		}
-		try
-		{
-			File.saveContent('modsList.txt', fileStr);
-		}
-		catch (e)
-		{
-			Logger.log('Could not write modsList.txt: $e', WARN);
 		}
 		#end
 	}

@@ -874,6 +874,7 @@ class PlayState extends MusicBeatState
 		#if mobile
 		 addMobileControls(false);
 	     hitbox.visible = false;
+	     scripts.set('hitbox', hitbox);
 		#end
 		
 		scripts.set('playFields', playFields);
