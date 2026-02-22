@@ -4,7 +4,7 @@
  * State that provides some character info, alongside providing a way to view some concepts.
  */
 import haxe.Json;
-import sys.io.File;
+import funkin.FunkinAssets;
 import flixel.FlxObject;
 import flixel.text.FlxText;
 import funkin.states.MainMenuState;
@@ -208,7 +208,7 @@ function centerButtons(sprites) {
  * String value of the character being loaded
  */
 function loadCharJSON(char) {
-	var rawJson = File.getContent(Paths.modFolders('images/menus/gallery/characters/' + char + '/data.json'));
+	var rawJson = FunkinAssets.getContent(Paths.modFolders('images/menus/gallery/characters/' + char + '/data.json'));
 	var data:CharacterData = Json.parse(rawJson);
 	return data;
 }

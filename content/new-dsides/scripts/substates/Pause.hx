@@ -1,5 +1,5 @@
 import haxe.Json;
-import sys.io.File;
+import funkin.FunkinAssets;
 import funkin.utils.CameraUtil;
 import flixel.text.FlxText;
 import flixel.addons.text.FlxTypeText;
@@ -310,7 +310,7 @@ function end() {
 }
 
 function loadJson() {
-	var rawJson = File.getContent(Paths.modFolders(StringTools.replace('songs/' + PlayState.SONG.song.toLowerCase() + '/metadata.json', ' ', '-')));
+	var rawJson = FunkinAssets.getContent(Paths.modFolders(StringTools.replace('songs/' + PlayState.SONG.song.toLowerCase() + '/metadata.json', ' ', '-')));
 	var data = Json.parse(rawJson);
 	return data;
 }

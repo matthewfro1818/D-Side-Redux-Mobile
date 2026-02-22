@@ -6,7 +6,6 @@
  */
 
 import haxe.Json;
-import sys.io.File;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import funkin.scripting.PluginsManager;

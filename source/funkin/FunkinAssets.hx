@@ -12,16 +12,96 @@ import flixel.system.FlxAssets;
 
 import funkin.backend.FunkinCache;
 
+#if (MODS_ALLOWED || ASSET_REDIRECT)
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 /**
  * backend for retrieving and caching assets
  */
 @:nullSafety(Strict)
 class FunkinAssets
 {
+	static inline final MODS_PREFIX:String = 'content/';
+	
 	/**
 	 * Handles the caching of assets collected through `Paths` 
 	 */
 	public static final cache:FunkinCache = new FunkinCache();
+	
+	static inline function normalizePath(path:String):String
+	{
+		if (path == null) return '';
+		return path.replace('\\', '/');
+	}
+	
+	static function getAssetCandidates(path:String):Array<String>
+	{
+		final normalized = normalizePath(path).trim();
+		final candidates:Array<String> = [];
+		
+		inline function pushCandidate(candidate:String):Void
+		{
+			if (candidate != null && candidate.length > 0 && !candidates.contains(candidate))
+			{
+				candidates.push(candidate);
+			}
+		}
+		
+		pushCandidate(path);
+		pushCandidate(normalized);
+		
+		if (normalized.startsWith(MODS_PREFIX))
+		{
+			pushCandidate(normalized.substr(MODS_PREFIX.length));
+		}
+		else
+		{
+			pushCandidate(MODS_PREFIX + normalized);
+		}
+		
+		return candidates;
+	}
+	
+	static function resolveAssetPath(path:String, ?type:AssetType):Null<String>
+	{
+		for (candidate in getAssetCandidates(path))
+		{
+			if (Assets.exists(candidate, type)) return candidate;
+			if (type != null && Assets.exists(candidate)) return candidate;
+		}
+		
+		return null;
+	}
+	
+	static function getAssetDirectoryPrefixes(directory:String):Array<String>
+	{
+		final normalized = normalizePath(directory).trim();
+		final prefixes:Array<String> = [];
+		
+		inline function pushPrefix(prefix:String):Void
+		{
+			if (prefix == null) return;
+			
+			prefix = prefix.trim();
+			if (!prefixes.contains(prefix)) prefixes.push(prefix);
+		}
+		
+		pushPrefix(directory);
+		pushPrefix(normalized);
+		
+		if (normalized.startsWith(MODS_PREFIX))
+		{
+			pushPrefix(normalized.substr(MODS_PREFIX.length));
+		}
+		else
+		{
+			pushPrefix(MODS_PREFIX + normalized);
+		}
+		
+		return prefixes;
+	}
 	
 	/**
 	 * Safer alternative to directly using `haxe.Json.parse`
@@ -67,7 +147,9 @@ class FunkinAssets
 		#if (MODS_ALLOWED || ASSET_REDIRECT)
 		if (FileSystem.exists(path)) return File.getBytes(path);
 		#end
-		if (Assets.exists(path)) return Assets.getBytes(path);
+		
+		final assetPath = resolveAssetPath(path);
+		if (assetPath != null) return Assets.getBytes(assetPath);
 		else
 		{
 			throw 'Couldnt find file at path [$path]';
@@ -81,13 +163,12 @@ class FunkinAssets
 	{
 		#if (MODS_ALLOWED || ASSET_REDIRECT)
 		if (FileSystem.exists(path)) return File.getContent(path);
-		else
 		#end
-		if (Assets.exists(path)) return Assets.getText(path);
-		else
-		{
-			throw 'Couldnt find file at path [$path]';
-		}
+		
+		final assetPath = resolveAssetPath(path);
+		if (assetPath != null) return Assets.getText(assetPath);
+		
+		throw 'Couldnt find file at path [$path]';
 	}
 	
 	/**
@@ -99,7 +180,11 @@ class FunkinAssets
 	{
 		var bitmap:Null<BitmapData> = null;
 		#if (MODS_ALLOWED || ASSET_REDIRECT) if (FileSystem.exists(path)) bitmap = BitmapData.fromFile(path);
-		else #end if (Assets.exists(path, IMAGE)) bitmap = Assets.getBitmapData(path, useCache);
+		else #end
+		{
+			final assetPath = resolveAssetPath(path, IMAGE);
+			if (assetPath != null) bitmap = Assets.getBitmapData(assetPath, useCache);
+		}
 		
 		return bitmap;
 	}
@@ -115,7 +200,7 @@ class FunkinAssets
 		if (FileSystem.exists(path)) exists = true;
 		else
 		#end
-		if (Assets.exists(path, type)) exists = true;
+		if (resolveAssetPath(path, type) != null) exists = true;
 		
 		return exists;
 	}
@@ -127,24 +212,68 @@ class FunkinAssets
 	 */
 	public static function readDirectory(directory:String):Array<String>
 	{
+		if (directory == null || directory.trim().length == 0) return [];
+		
+		var entries:Array<String> = [];
+		
 		#if (MODS_ALLOWED || ASSET_REDIRECT)
-		return FileSystem.exists(directory) ? FileSystem.readDirectory(directory) : []; // doing a check because i want this to maintain parity with ther assets variation
-		#else
-		if (directory.trim().length == 0) return [];
-		var dir = Assets.list().filter(string -> string.contains(directory));
-		return dir.map(string -> string.replace(directory, '').replace('/', ''));
+		if (FileSystem.exists(directory) && FileSystem.isDirectory(directory))
+		{
+			for (entry in FileSystem.readDirectory(directory))
+			{
+				if (!entries.contains(entry)) entries.push(entry);
+			}
+		}
 		#end
+		
+		for (prefix in getAssetDirectoryPrefixes(directory))
+		{
+			var targetPrefix = normalizePath(prefix);
+			if (!targetPrefix.endsWith('/')) targetPrefix += '/';
+			
+			for (path in Assets.list())
+			{
+				final normalizedPath = normalizePath(path);
+				
+				if (!normalizedPath.startsWith(targetPrefix) || normalizedPath == targetPrefix) continue;
+				
+				final remainder = normalizedPath.substr(targetPrefix.length);
+				final slashIndex = remainder.indexOf('/');
+				final entryName = slashIndex == -1 ? remainder : remainder.substr(0, slashIndex);
+				
+				if (entryName.length > 0 && !entries.contains(entryName))
+				{
+					entries.push(entryName);
+				}
+			}
+		}
+		
+		return entries;
 	}
 	
 	public static function isDirectory(directory:String):Bool
 	{
+		if (directory == null || directory.trim().length == 0) return false;
+		
 		#if (MODS_ALLOWED || ASSET_REDIRECT)
-		return FileSystem.isDirectory(directory);
-		#else
-		// this method is a bit chopped...
-		if (directory.trim().length == 0) return false;
-		return Assets.list().filter(path -> return path != directory && path.startsWith(directory)).length != 0;
+		if (FileSystem.exists(directory) && FileSystem.isDirectory(directory))
+		{
+			return true;
+		}
 		#end
+		
+		for (prefix in getAssetDirectoryPrefixes(directory))
+		{
+			var targetPrefix = normalizePath(prefix);
+			if (!targetPrefix.endsWith('/')) targetPrefix += '/';
+			
+			for (path in Assets.list())
+			{
+				if (normalizePath(path).startsWith(targetPrefix)) return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -232,8 +361,11 @@ class FunkinAssets
 		
 		var sound:Null<Sound> = null;
 		
-		#if (MODS_ALLOWED || ASSET_REDIRECT) if (FileSystem.exists(key)) sound = Sound.fromFile(key);
-		else #end if (Assets.exists(key, SOUND)) sound = Assets.getSound(key, true);
+		final assetPath = resolveAssetPath(key, SOUND);
+		if (assetPath != null) sound = Assets.getSound(assetPath, true);
+		#if (MODS_ALLOWED || ASSET_REDIRECT)
+		else if (FileSystem.exists(key)) sound = Sound.fromFile(key);
+		#end
 		
 		if (sound != null)
 		{

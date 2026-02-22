@@ -1,14 +1,14 @@
 import funkin.utils.SortUtil;
 import funkin.utils.CameraUtil;
+import funkin.FunkinAssets;
 import flixel.util.FlxSort;
-import sys.FileSystem;
 
 var stickerGrp:FlxTypedGroup;
 var pack = [];
 var packChoice = FlxG.random.int(1, 3);
 
 var rare = FlxG.random.bool(5);
-var secrets = FileSystem.readDirectory('content/new-dsides/images/UI/stickers/secrets');
+var secrets = FunkinAssets.readDirectory('content/new-dsides/images/UI/stickers/secrets');
 if (FlxG.random.bool(75))
 	secrets.remove('golden.png');
 
@@ -37,7 +37,7 @@ function onLoad() {
 		FlxG.save.data.stickerHell = [];
 		FlxG.save.data.packChoice = packChoice;
 		FlxG.save.flush();
-		pack = FileSystem.readDirectory('content/new-dsides/images/UI/stickers/pack ' + FlxG.save.data.packChoice);
+		pack = FunkinAssets.readDirectory('content/new-dsides/images/UI/stickers/pack ' + FlxG.save.data.packChoice);
 		for (i in 0...maxStickers) {
 			choice = FlxG.random.int(0, pack.length - 1, [choice]);
 			posChoice = FlxG.random.int(0, positions.length - 1, [posChoice]);
@@ -91,7 +91,7 @@ function onLoad() {
 			FlxG.save.data.stickerHell.push(data);
 		}
 	} else {
-		pack = FileSystem.readDirectory('content/new-dsides/images/UI/stickers/pack ' + FlxG.save.data.packChoice);
+		pack = FunkinAssets.readDirectory('content/new-dsides/images/UI/stickers/pack ' + FlxG.save.data.packChoice);
 		for (i in FlxG.save.data.stickerHell) {
 			var sticky = newSticker(FlxG.save.data.packChoice, i.name, FlxPoint.get(i.position[0], i.position[1]), i.index, i.angle);
 			stickerGrp.add(sticky);

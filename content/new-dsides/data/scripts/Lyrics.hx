@@ -1,5 +1,5 @@
 import haxe.Json;
-import sys.io.File;
+import funkin.FunkinAssets;
 import funkin.backend.Conductor;
 import flixel.text.FlxText;
 import funkin.scripting.PluginsManager;
@@ -11,7 +11,7 @@ typedef LyricData = {
 }
 
 function loadJson() {
-	var rawJson = File.getContent(Paths.modFolders(StringTools.replace('songs/' + PlayState.SONG.song.toLowerCase() + '/data/lyrics.json', ' ', '-')));
+	var rawJson = FunkinAssets.getContent(Paths.modFolders(StringTools.replace('songs/' + PlayState.SONG.song.toLowerCase() + '/data/lyrics.json', ' ', '-')));
 	var data = Json.parse(rawJson);
 
 	return data;

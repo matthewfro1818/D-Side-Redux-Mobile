@@ -58,7 +58,7 @@ class Paths
 		{
 			final modPath:String = modFolders(file);
 			
-			if (FileSystem.exists(modPath)) return modPath;
+			if (FunkinAssets.exists(modPath)) return modPath;
 		}
 		#end
 		
@@ -393,7 +393,8 @@ class Paths
 		var folders:Array<String> = [];
 		var files:Array<String> = [];
 		
-		if (FunkinAssets.exists(getCorePath(directory))) folders.push(getCorePath(directory));
+		final coreFolder = getCorePath(directory);
+		if (FunkinAssets.isDirectory(coreFolder)) folders.push(coreFolder);
 		
 		#if MODS_ALLOWED
 		if (checkMods)
@@ -401,16 +402,16 @@ class Paths
 			for (mod in Mods.globalMods)
 			{
 				final folder = mods('$mod/$directory');
-				if (FileSystem.exists(folder) && !folders.contains(folder)) folders.push(folder);
+				if (FunkinAssets.isDirectory(folder) && !folders.contains(folder)) folders.push(folder);
 			}
 			
 			final folder = mods(directory);
-			if (FileSystem.exists(folder) && !folders.contains(folder)) folders.push(folder);
+			if (FunkinAssets.isDirectory(folder) && !folders.contains(folder)) folders.push(folder);
 			
 			if (Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0)
 			{
 				final folder = mods('${Mods.currentModDirectory}/$directory');
-				if (FileSystem.exists(folder) && !folders.contains(folder)) folders.push(folder);
+				if (FunkinAssets.isDirectory(folder) && !folders.contains(folder)) folders.push(folder);
 			}
 		}
 		#end
@@ -427,7 +428,6 @@ class Paths
 		return files;
 	}
 	
-	#if MODS_ALLOWED
 	/**
 	 * Inserts the mod asset path to the given file path
 	 */
@@ -435,6 +435,8 @@ class Paths
 	{
 		return '$MODS_DIRECTORY/' + key;
 	}
+	
+	#if MODS_ALLOWED
 	
 	/**
 	 * Searches the primary loaded mod path and general mod path for a given file
@@ -445,7 +447,7 @@ class Paths
 		{
 			final fileToCheck:String = mods(Mods.currentModDirectory + '/' + key);
 			// trace(fileToCheck);
-			if (FileSystem.exists(fileToCheck))
+			if (FunkinAssets.exists(fileToCheck))
 			{
 				return fileToCheck;
 			}
@@ -454,7 +456,7 @@ class Paths
 		for (mod in Mods.globalMods)
 		{
 			final fileToCheck:String = mods(mod + '/' + key);
-			if (FileSystem.exists(fileToCheck)) return fileToCheck;
+			if (FunkinAssets.exists(fileToCheck)) return fileToCheck;
 		}
 		return mods(key);
 	}

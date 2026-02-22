@@ -23,7 +23,6 @@ import funkin.game.shaders.ColorSwap;
 import funkin.objects.Bopper;
 import haxe.Json;
 import openfl.utils.Assets;
-import sys.io.File;
 import funkin.backend.PlayerSettings;
 import funkin.scripting.PluginsManager;
 import funkin.api.DiscordClient;

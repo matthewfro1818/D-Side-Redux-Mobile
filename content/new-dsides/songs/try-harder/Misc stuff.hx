@@ -1,5 +1,4 @@
 import haxe.Json;
-import sys.io.File;
 import funkin.backend.Conductor;
 import flixel.text.FlxText;
 import funkin.scripting.PluginsManager;

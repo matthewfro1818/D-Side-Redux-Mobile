@@ -12,8 +12,7 @@
 
 import haxe.Json;
 import lime.graphics.Image;
-import sys.io.File;
-import sys.FileSystem;
+import funkin.FunkinAssets;
 import flixel.text.FlxText;
 import funkin.Mods;
 import funkin.backend.Conductor;
@@ -223,7 +222,7 @@ function onStateSwitchPost(state) {
 */
 // Loads song json stuff, used for lyrics & metadata stuff
 function loadJson(name, song) {
-	var rawJson = File.getContent(Paths.modFolders(StringTools.replace('songs/' + song + '/data/' + name + '.json', ' ', '-')));
+	var rawJson = FunkinAssets.getContent(Paths.modFolders(StringTools.replace('songs/' + song + '/data/' + name + '.json', ' ', '-')));
 	var data = Json.parse(rawJson);
 	return data;
 }

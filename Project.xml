@@ -43,6 +43,7 @@
     <!-- _____________________________ Path Settings ____________________________ -->
 
     <classpath name="source" />
+    <assets path='content' embed='false' if="mobile"/>
 
     <!--Fixes hxvlc using global rather than local. you will need to use hmm/hxpkg to compile this project though-->
     <setenv name="HAXEPATH" value="./"/>
@@ -55,8 +56,6 @@
     <assets path='assets/embeds' rename='assets' embed="true" />
     <assets path="assets/game" rename="assets"/>
     <assets path="assets/mobile"/>
-
-    <assets path='content' embed='false' if="MODS_ALLOWED"/>
 
     <!--OpenAL config-->    <!-- appreciate you cyn0x8 and smokey for finding this -->
     <section if="desktop">
