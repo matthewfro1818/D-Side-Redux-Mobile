@@ -31,12 +31,13 @@ float quantize(float value, float quality) {
 }
 
 // Average colors inside a pixelation block by sampling a grid of pixels
-vec4 pixelateBlock(vec2 uv, vec2 pixelSize, vec2 resolution, int samples) {
+vec4 pixelateBlock(vec2 uv, vec2 pixelSize) {
     vec4 sumColor = vec4(0.0);
     // Find top-left corner of the block
     vec2 blockOrigin = floor(uv / pixelSize) * pixelSize;
 
-    // Sample evenly inside block (samples x samples grid)
+    // Use a 2x2 grid on mobile to reduce shader cost.
+    const int samples = 2;
     for (int x = 0; x < samples; x++) {
         for (int y = 0; y < samples; y++) {
             // Calculate offset inside block [0..1)
@@ -51,15 +52,19 @@ vec4 pixelateBlock(vec2 uv, vec2 pixelSize, vec2 resolution, int samples) {
 void main() {
     vec2 uv = openfl_TextureCoordv;
     vec2 resolution = openfl_TextureSize;
+    vec4 original = texture2D(bitmap, uv);
+
+    if (uStrength <= 0.0001 || uQuality <= 0.02)
+    {
+        gl_FragColor = original;
+        return;
+    }
 
     float blockSize = mix(1.0, 12.0, clamp(uQuality, 0.0, 1.0));
     vec2 pixelSize = blockSize / resolution;
 
-    // Number of samples per block edge (adjust for performance/quality)
-    int samples = 3;
-
     // Get averaged pixelated color over block
-    vec4 pixelated = pixelateBlock(uv, pixelSize, resolution, samples);
+    vec4 pixelated = pixelateBlock(uv, pixelSize);
 
     // Convert to YCbCr
     vec3 ycbcr = rgb2ycbcr(pixelated.rgb);
@@ -71,9 +76,6 @@ void main() {
     // Convert back to RGB
     vec3 compressedRGB = ycbcr2rgb(ycbcr);
     compressedRGB = clamp(compressedRGB, 0.0, 1.0);
-
-    // Sample original color (non-pixelated)
-    vec4 original = texture2D(bitmap, uv);
 
     // Blend between original and compressed pixelated color
     vec3 blendedColor = mix(original.rgb, compressedRGB, uStrength);

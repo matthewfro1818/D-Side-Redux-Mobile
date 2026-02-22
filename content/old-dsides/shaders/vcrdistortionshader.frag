@@ -14,14 +14,6 @@ float onOff(float a, float b, float c)
     return step(c, sin(iTime + a*cos(iTime*b)));
 }
 
-float ramp(float y, float start, float end)
-{
-    float inside = step(start,y) - step(end,y);
-    float fact = (y-start)/(end-start)*inside;
-    return (1.-fact) * inside;
-
-}
-
 vec2 distortUV(vec2 look){
     if(distortionOn){
     float window = 1./(1.+20.*(look.y-mod(iTime/4.,1.))*(look.y-mod(iTime/4.,1.)));
@@ -49,39 +41,19 @@ vec2 screenDistort(vec2 uv)
     if(perspectiveOn){
     uv = (uv - 0.5) * 2.0;
     uv *= 1.1;
-    uv.x *= 1.0 + pow((abs(uv.y) / 5.0), 2.0);
-    uv.y *= 1.0 + pow((abs(uv.x) / 4.0), 2.0);
+    float absY = abs(uv.y) / 5.0;
+    float absX = abs(uv.x) / 4.0;
+    uv.x *= 1.0 + absY * absY;
+    uv.y *= 1.0 + absX * absX;
     uv  = (uv / 2.0) + 0.5;
     uv =  uv *0.92 + 0.04;
     return uv;
     }
     return uv;
 }
-float random(vec2 uv)
-{
-    return fract(sin(dot(uv, vec2(15.5151, 42.2561))) * 12341.14122 * sin(iTime * 0.03));
-}
 
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
-
-
-
-float noise(vec2 uv)
-{
-    vec2 i = floor(uv);
-    vec2 f = fract(uv);
-
-    float a = random(i);
-    float b = random(i + vec2(1.,0.));
-    float c = random(i + vec2(0., 1.));
-    float d = random(i + vec2(1.));
-
-    vec2 u = smoothstep(0., 1., f);
-
-    return mix(a,b, u.x) + (c - a) * u.y * (1. - u.x) + (d - b) * u.x * u.y;
-
 }
 
 
@@ -98,13 +70,19 @@ vec2 scandistort(vec2 uv) {
 void main()
 {
     vec2 uv = openfl_TextureCoordv;
+    if (!vignetteOn && !perspectiveOn && !distortionOn && glitchModifier <= 0.0001)
+    {
+        gl_FragColor = flixel_texture2D(bitmap, uv);
+        return;
+    }
+
     vec2 tvWow = screenDistort(uv);
     if(distortionOn){
     uv.x += rand(vec2(0, (uv.y/125.0) + iTime))/256.;
     uv.y += rand(vec2(0, (uv.x/125.0) + iTime))/256.;
     }
     vec2 curUV = screenDistort(distortUV(uv));
-    uv = scandistort(curUV);
+    uv = distortionOn ? scandistort(curUV) : curUV;
     vec4 video = getVideo(uv);
     float vigAmt = 1.0;
     float x =  0.;

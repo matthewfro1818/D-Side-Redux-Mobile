@@ -1,5 +1,7 @@
 #pragma header
 
+precision mediump float;
+
 uniform float iTime;
 
 #define iChannel0 bitmap
@@ -38,7 +40,7 @@ float worley2d(vec2 coord)
     vec2 p = coord * NUM_CELLS;
     vec2 i = floor(p);
     vec2 f = fract(p);
-    float minDist = 1.0;
+    float minDistSq = 2.0;
     
     for (int y = 0; y <= 2; y++) 
     { 
@@ -49,10 +51,12 @@ float worley2d(vec2 coord)
             
             vec2 pointOffset = vec2(hash12(cell_id), hash12(cell_id.yx));
             vec2 diff = neighbor + pointOffset - f;
-            minDist = min(minDist, length(diff));
+            float distSq = dot(diff, diff);
+            minDistSq = min(minDistSq, distSq);
         }
     }
-    return clamp(1.0 - (minDist / 1.4142), 0.0, 1.0); 
+    float minDist = sqrt(minDistSq);
+    return clamp(1.0 - (minDist * 0.70710678), 0.0, 1.0); 
 }
 
 float fbmWorld(vec2 p) 
@@ -76,11 +80,11 @@ float fbmPerly(vec2 p)
     float freq = 8.0;   
     float amp = 0.512;  
     
-    for (int i = 0; i < 5; ++i) 
+    for (int i = 0; i < 3; ++i) 
     { 
         sum += valueNoise(p * freq) * amp; 
         freq *= 2.0; 
-        amp *= 0.8; 
+        amp *= 0.7; 
     } 
     return sum; 
 }
@@ -92,6 +96,20 @@ float remap(float x, float lo1, float hi1, float lo2, float hi2)
 
 void main() 
 {
+    float alpha = flixel_texture2D(bitmap, openfl_TextureCoordv).a;
+    if (alpha <= 0.0001)
+    {
+        gl_FragColor = vec4(0.0);
+        return;
+    }
+
+    float colorAmount = max(red_amt, max(green_amt, blue_amt));
+    if (colorAmount <= 0.0001)
+    {
+        gl_FragColor = vec4(0.0, 0.0, 0.0, alpha);
+        return;
+    }
+
     vec2 uv = openfl_TextureCoordv;
     uv.y *= (openfl_TextureSize.y / openfl_TextureSize.x);
     
@@ -100,5 +118,5 @@ void main()
     
     float noiseValue = remap(detail, 1.0 - base, 1.0, 0.0, 1.0) * 2.0;
 
-    gl_FragColor = vec4(noiseValue * red_amt, noiseValue * green_amt, noiseValue * blue_amt, flixel_texture2D(bitmap, openfl_TextureCoordv).a);
+    gl_FragColor = vec4(noiseValue * red_amt, noiseValue * green_amt, noiseValue * blue_amt, alpha);
 }

@@ -3,6 +3,7 @@ dump/*
 
 .haxelib/*
 content/avas_evil_secrets/*
+tools/*
 ### Mac
 .DS_Store
 .icloud
