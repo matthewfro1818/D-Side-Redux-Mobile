@@ -41,11 +41,6 @@ class Main extends Sprite
 	{
 		super();
 		
-		#if mobile
-		StorageSystem.getPermissions();
-		Sys.setCwd(StorageSystem.getStorageDirectory());
-		#end
-		
 		#if (CRASH_HANDLER && !debug)
 		funkin.backend.CrashHandler.init();
 		#end
