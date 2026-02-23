@@ -1,6 +1,6 @@
 #pragma header
 
-precision mediump float;
+precision highp float;
 
 uniform float intensity;
 uniform int amount;
@@ -14,16 +14,9 @@ float hash(float n)
 void main()
 {
     vec4 baseColor = flixel_texture2D(bitmap, openfl_TextureCoordv);
-    if (baseColor.a <= 0.0001 || intensity <= 0.0001 || amount <= 0)
-    {
-        gl_FragColor = baseColor;
-        return;
-    }
-
     vec2 uv = vec2(openfl_TextureCoordv.x * 2.0, openfl_TextureCoordv.y);
     
-    int snowCount = min(amount, 20);
-    float fAmount = max(float(snowCount), 1.0);
+    float fAmount = float(amount);
     
     float timeFactor = time * 1.5 * (0.1 + intensity);
     float radScale = (intensity / 0.1333) * 0.012;
@@ -31,7 +24,7 @@ void main()
 
     for(int i = 0; i < 30; i++) 
     {
-        if (i >= snowCount) break;
+        if (i >= amount) break;
 
         float fI = float(i);
         float j = fI * 2.0;
