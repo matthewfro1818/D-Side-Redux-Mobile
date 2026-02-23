@@ -148,9 +148,16 @@ class FunkinCache
 	 */
 	public function disposeGraphic(graphic:Null<FlxGraphic>)
 	{
-		if (graphic != null && graphic.bitmap != null && graphic.bitmap.__texture != null) graphic.bitmap.__texture.dispose();
-		@:nullSafety(Off) FlxG.bitmap.remove(graphic);
+	    if (graphic == null || graphic.bitmap == null) return;
+	
+	    if (graphic.bitmap.__texture != null) 
+	        graphic.bitmap.__texture.dispose();
+
+	    graphic.bitmap.dispose();
+	    FlxG.bitmap.remove(graphic);
+	    graphic.destroy();
 	}
+
 	
 	/**
 	 * Caches and returns a new `FlxGraphic` instance.
@@ -160,6 +167,12 @@ class FunkinCache
 	 */
 	public function cacheBitmap(key:String, bitmap:BitmapData, allowGPU:Bool = true):FlxGraphic
 	{
+		if (currentTrackedGraphics.exists(key))
+			return currentTrackedGraphics.get(key);
+	
+		if (bitmap == null)
+			bitmap = openfl.utils.Assets.getBitmapData(key);
+	
 		if (allowGPU && ClientPrefs.gpuCaching)
 		{
 			bitmap.disposeImage();
