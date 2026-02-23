@@ -167,9 +167,10 @@ class FunkinCache
 	 */
 	public function cacheBitmap(key:String, bitmap:BitmapData, allowGPU:Bool = true):FlxGraphic
 	{
-		if (currentTrackedGraphics.exists(key))
+		var trackedGraphic:Null<FlxGraphic> = currentTrackedGraphics.get(key);
+		if (trackedGraphic != null)
 		{
-			return cast (currentTrackedGraphics.get(key), FlxGraphic);
+			return trackedGraphic;
 		}
 	
 		if (bitmap == null)
