@@ -1388,12 +1388,10 @@ function realSongLoad() {
 	}
 
 	var dir = titles[curSection] == 'ORIGINAL' && song != 'soretro' ? 'old-dsides' : 'new-dsides';
-	if (Mods.currentModDirectory == 'new-dsides') {
-		if (dir == 'old-dsides')
-			PluginsManager.callPluginFunc('Utils', 'setDirectory', ['old-dsides']);
-		else
-			ScriptedTransition.setTransition('Sticker');
-	}
+	if (Mods.currentModDirectory != dir || Paths.currentModDirectory != dir)
+		PluginsManager.callPluginFunc('Utils', 'setDirectory', [dir]);
+	if (dir == 'new-dsides')
+		ScriptedTransition.setTransition('Sticker');
 	// var songLowercase:String = Paths.formatToSongPath(song);
 
 	PlayState.prepareForSong(song, curDifficulty, false);

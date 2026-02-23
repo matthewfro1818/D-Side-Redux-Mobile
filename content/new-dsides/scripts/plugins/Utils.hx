@@ -260,8 +260,8 @@ function setMouseGraphic(hovered:Bool = false) {
  */
 function setDirectory(directory:String) {
 	Mods.currentModDirectory = directory;
-	Mods.updateModList(directory);
-	Mods.loadTopMod();
+	Paths.currentModDirectory = directory;
+	Mods.applyModConfig(directory);
 }
 
 
