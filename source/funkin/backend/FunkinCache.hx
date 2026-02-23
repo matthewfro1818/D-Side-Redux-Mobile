@@ -168,7 +168,9 @@ class FunkinCache
 	public function cacheBitmap(key:String, bitmap:BitmapData, allowGPU:Bool = true):FlxGraphic
 	{
 		if (currentTrackedGraphics.exists(key))
-			return currentTrackedGraphics.get(key);
+		{
+			return cast (currentTrackedGraphics.get(key), FlxGraphic);
+		}
 	
 		if (bitmap == null)
 			bitmap = openfl.utils.Assets.getBitmapData(key);
