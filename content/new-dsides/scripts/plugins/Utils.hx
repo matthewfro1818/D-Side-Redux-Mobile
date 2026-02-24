@@ -19,9 +19,6 @@ import funkin.backend.Conductor;
 import funkin.utils.CameraUtil;
 import funkin.utils.WindowUtil;
 
-// Force a full unlock save each time the mod plugin loads.
-var FORCE_UNLOCK_ALL:Bool = true;
-
 /**
  * [onLoad()]
  * Runs upon loading the mod.
@@ -29,10 +26,6 @@ var FORCE_UNLOCK_ALL:Bool = true;
 function onLoad() {
 	FlxG.save.data.loading = false;
 	saveFix();
-
-	if (FORCE_UNLOCK_ALL) {
-		fullSave();
-	}
 }
 
 /**

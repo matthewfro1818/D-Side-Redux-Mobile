@@ -11,6 +11,9 @@ import funkin.states.MainMenuState;
 import funkin.scripting.PluginsManager;
 import funkin.api.DiscordClient;
 
+import mobile.controls.MobileDPadMode;
+import mobile.controls.MobileActionMode;
+
 var controls = PlayerSettings.player1.controls;
 
 // Typedef made to simplify and improve the readability of a user's credit data
@@ -393,6 +396,34 @@ var credits:Array<CredData> = [
 		links: ['https://twitter.com/FunkiestBunny',]
 	},
 	{
+		icon: "creambr",
+		user: "StarNova (Cream.BR)",
+		creds: ['Mobile Port'],
+		desc: "I am someone... I am someone",
+		links: [
+			'https://youtube.com/@creambroficial',
+			'https://twitter.com/StarNovaBR'
+		]
+	},
+	{
+		icon: "fnfbr",
+		user: "FNF BR",
+		creds: ['Mobile Port'],
+		desc: "Brazil BRAZIL LET'S GO!!",
+		links: [
+			'https://youtube.com/@fnf-br'
+		]
+	},
+	{
+		icon: "dechis",
+		user: "Dechis",
+		creds: ['Mobile Port'],
+		desc: "Amogus",
+		links: [
+			'https://youtube.com/@deechiss'
+		]
+	},
+	{
 		icon: "contributors",
 		user: "Contributors",
 		creds: [
@@ -635,6 +666,9 @@ function onCreate() {
 
         FlxG.save.flush();
     }
+    
+    addVirtualPad(MobileDPadMode.UP_DOWN, MobileActionMode.NONE);
+	addVirtualPadCamera();
 
 }
 
@@ -696,10 +730,10 @@ function onUpdate(elapsed) {
 	}
 
 	ity += (FlxG.mouse.wheel * 25);
-	if (controls.UI_UP)
+	if (controls.UI_UP || virtualPad.buttonUp.pressed)
 		ity += 10 * (60 * elapsed);
 
-	if (controls.UI_DOWN)
+	if (controls.UI_DOWN || virtualPad.buttonDown.pressed)
 		ity -= 10 * (60 * elapsed);
 
 	if (ity >= limits[0])
