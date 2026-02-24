@@ -344,8 +344,20 @@ class FunkinAssets
 			return cache.currentTrackedGraphics.get(key);
 		}
 		
-		var bitmap:Null<BitmapData> = getBitmapData(key);
+		final assetPath = resolveAssetPath(key, IMAGE);
+		if (assetPath != null)
+		{
+			final graphic = FlxGraphic.fromAssetKey(assetPath, false, key);
+			if (graphic != null)
+			{
+				return cache.cacheGraphic(key, graphic, allowGPU);
+			}
+		}
 		
+		var bitmap:Null<BitmapData> = null;
+		#if (MODS_ALLOWED || ASSET_REDIRECT)
+		if (FileSystem.exists(key)) bitmap = BitmapData.fromFile(key);
+		#end
 		if (bitmap != null)
 		{
 			return cache.cacheBitmap(key, bitmap, allowGPU);
