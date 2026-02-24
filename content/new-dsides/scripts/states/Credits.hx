@@ -417,7 +417,7 @@ var credits:Array<CredData> = [
 	{
 		icon: "dechis",
 		user: "Dechis",
-		creds: ['Mobile Port'],
+		creds: ['Special Thanks (Mobile Port)'],
 		desc: "Amogus",
 		links: [
 			'https://youtube.com/@deechiss'
@@ -672,7 +672,7 @@ function onCreate() {
 
 }
 
-var limits = [40, -710];
+var limits = [40, -740];
 var timer = 0;
 var dir = 1;
 var depth = 50;
