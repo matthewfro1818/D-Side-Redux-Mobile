@@ -672,7 +672,7 @@ function onCreate() {
 
 }
 
-var limits = [40, -680];
+var limits = [40, -710];
 var timer = 0;
 var dir = 1;
 var depth = 50;
