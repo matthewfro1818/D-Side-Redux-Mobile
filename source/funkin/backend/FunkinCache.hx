@@ -160,18 +160,31 @@ class FunkinCache
 	 */
 	public function cacheBitmap(key:String, bitmap:BitmapData, allowGPU:Bool = true):FlxGraphic
 	{
-		if (allowGPU && ClientPrefs.gpuCaching)
+		final existingGraphic:Null<FlxGraphic> = FlxG.bitmap.get(key);
+		if (existingGraphic != null)
 		{
-			bitmap.disposeImage();
+			return cacheGraphic(key, existingGraphic, allowGPU);
 		}
 		
-		var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, key);
-		newGraphic.persist = true;
-		newGraphic.destroyOnNoUse = false;
+		@:privateAccess final newGraphic:FlxGraphic = new FlxGraphic(key, bitmap);
+		FlxG.bitmap.addGraphic(newGraphic);
+		
+		return cacheGraphic(key, newGraphic, allowGPU);
+	}
+	
+	public function cacheGraphic(key:String, graphic:FlxGraphic, allowGPU:Bool = true):FlxGraphic
+	{
+		if (allowGPU && ClientPrefs.gpuCaching && graphic.bitmap != null)
+		{
+			graphic.bitmap.disposeImage();
+		}
+		
+		graphic.persist = true;
+		graphic.destroyOnNoUse = false;
 		
 		localTrackedAssets.push(key);
-		currentTrackedGraphics.set(key, newGraphic);
-		return newGraphic;
+		currentTrackedGraphics.set(key, graphic);
+		return graphic;
 	}
 	
 	public function cacheSound(key:String, sound:Sound):Sound

@@ -2,7 +2,7 @@
 <project>
     <!-- _________________________ Application Settings _________________________ -->
 
-    <app title="FNF: D-Side Redux" file="D-Side Redux" packageName="com.dsideTeam.dSideReduxtest" package="com.dsideTeam.dSideReduxtest" main="Main" version="0.2.7" company="dsideTeam" />
+    <app title="FNF: D-Side Redux" file="D-Side Redux" packageName="com.dsideTeam.dSideRedux" package="com.dsideTeam.dSideRedux" main="Main" version="0.2.7" company="dsideTeam" />
 
     <!--Switch Export with Unique ApplicationID and Icon-->
     <set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -56,6 +56,7 @@
     <assets path='assets/embeds' rename='assets' embed="true" />
     <assets path="assets/game" rename="assets"/>
     <assets path="assets/mobile"/>
+    <assets path="modsList.txt"/>
 
     <!--OpenAL config-->    <!-- appreciate you cyn0x8 and smokey for finding this -->
     <section if="desktop">
@@ -127,14 +128,6 @@
     
     <!-- Mobile Shit -->
     <section if="android">
-    <config:android permission="android.permission.MANAGE_MEDIA"/> 
-	<config:android permission="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-	<config:android permission="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<config:android permission="android.permission.READ_EXTERNAL_STORAGE" />
-	<config:android permission="android.permission.READ_MEDIA_IMAGES"/>
-	<config:android permission="android.permission.READ_MEDIA_AUDIO"/>
-	<config:android permission="android.permission.READ_MEDIA_VIDEO"/>
-	<config:android permission="android.permission.READ_MEDIA_DOCUMENTS" />
 	<config:android permission="android.permission.VIBRATE" />
 	<config:android permission="android.permission.INTERNET" />
 	<config:android permission="android.permission.ACCESS_WIFI_STATE"/>
@@ -147,7 +140,6 @@
     
     <!-- IOS stuff -->
     <section if="ios">
-	<haxedef name="SHARE_MOBILE_FILES" />
 	<config:ios category_type="public.app-category.music-games" />
 	<config:mac category_type="public.app-category.music-games" />
 	</section>

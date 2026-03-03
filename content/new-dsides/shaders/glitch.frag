@@ -17,15 +17,15 @@ vec2 quantize(vec2 v, float steps)
     return floor(v * steps) / steps;
 }
 
-float dist(vec2 a, vec2 b)
-{
-    return sqrt(pow(b.x - a.x, 2.0) + pow(b.y - a.y, 2.0));
-}
-
 void main()
 {   
     vec2 uv = openfl_TextureCoordv;
-    float amount = pow(GlitchAmount, 2.0);
+    float amount = GlitchAmount * GlitchAmount;
+    if (amount <= 0.000001)
+    {
+        gl_FragColor = flixel_texture2D(bitmap, uv);
+        return;
+    }
     vec2 pixel = 1.0 / iResolution.xy;    
     vec4 color = flixel_texture2D(bitmap, uv);
     float t = mod(mod(iTime, amount * 100.0 * (amount - 0.5)) * 109.0, 1.0);

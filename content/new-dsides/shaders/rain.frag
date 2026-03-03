@@ -185,8 +185,12 @@ float rainDist(vec2 p, float scale, float intensity) {
 
 void main() {
 	vec2 wpos = screenToWorld(screenCoord);
-	vec2 origWpos = wpos;
 	float intensity = uIntensity;
+	if (intensity <= 0.0001)
+	{
+		gl_FragColor = sampleBitmapWorld(wpos);
+		return;
+	}
 
 	vec3 add = vec3(0);
 	float rainSum = 0.0;

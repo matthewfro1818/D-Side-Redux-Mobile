@@ -76,12 +76,12 @@ class MacroUtil
 	public static macro function getPrecompliedContent(path:String)
 	{
 		#if !display
-		if (!sys.FileSystem.exists(path))
+		if (!funkin.FunkinAssets.exists(path))
 		{
 			Context.fatalError('could not find content at $path', Context.currentPos());
 		}
 		
-		final ret = sys.io.File.getContent(path);
+		final ret = funkin.FunkinAssets.getContent(path);
 		
 		return macro $v{ret};
 		#end

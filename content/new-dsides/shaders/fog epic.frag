@@ -43,7 +43,7 @@ float fBm(vec3 uv)
     float amp = 0.5;
     float freq = 1.0;
     
-    for (int i = 0; i < 4; ++i) 
+    for (int i = 0; i < 3; ++i) 
     {
         sum += noise3D(uv * freq) * amp;
         freq *= 2.0;
@@ -59,6 +59,13 @@ float gradient(vec2 uv)
 
 void main() 
 {
+    float alpha = flixel_texture2D(bitmap, openfl_TextureCoordv).a;
+    if (alpha <= 0.0001)
+    {
+        gl_FragColor = vec4(0.0);
+        return;
+    }
+
     vec2 uv = openfl_TextureCoordv;
     vec3 p = vec3(uv, iTime * speed);
     vec3 offset = vec3(0.1, 0.3, 0.2);
@@ -68,8 +75,6 @@ void main()
     float q = gradient(uv + duv) * cloudDensity;
     
     q *= 0.65; 
-    
-    float alpha = flixel_texture2D(bitmap, openfl_TextureCoordv).a;
     
     gl_FragColor = vec4(q - customred, q - customgreen, q - customblue, alpha);
 }

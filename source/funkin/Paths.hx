@@ -58,13 +58,13 @@ class Paths
 		{
 			final modPath:String = modFolders(file);
 			
-			if (FunkinAssets.exists(modPath)) return modPath;
+			if (FunkinAssets.exists(modPath) || FunkinAssets.isDirectory(modPath)) return modPath;
 		}
 		#end
 		
 		#if ASSET_REDIRECT
 		final embedPath = getCorePath().replace(CORE_DIRECTORY, trail + 'assets/embeds') + file;
-		if (FunkinAssets.exists(embedPath)) return embedPath;
+		if (FunkinAssets.exists(embedPath) || FunkinAssets.isDirectory(embedPath)) return embedPath;
 		#end
 		
 		return getCorePath(file);
@@ -175,7 +175,7 @@ class Paths
 		var name = sanitize(song);
 		
 		var songKey:String = '$name/Track';
-		if (FunkinAssets.isDirectory(getPath('songs/$name/audio', null, checkMods))) songKey = '$name/audio/Track';
+		if (hasSongAudioFolder(name, checkMods)) songKey = '$name/audio/Track';
 		
 		if (postFix != null) songKey += '-$postFix';
 		
@@ -193,7 +193,7 @@ class Paths
 		var name = sanitize(song);
 		
 		var songKey:String = '$name/Voices';
-		if (FunkinAssets.isDirectory(getPath('songs/$name/audio', null, checkMods))) songKey = '$name/audio/Voices';
+		if (hasSongAudioFolder(name, checkMods)) songKey = '$name/audio/Voices';
 		
 		if (postFix != null) songKey += '-$postFix';
 		
@@ -209,7 +209,7 @@ class Paths
 		var name = sanitize(song);
 		
 		var songKey:String = '$name/Inst';
-		if (FunkinAssets.isDirectory(getPath('songs/$name/audio', null, checkMods))) songKey = '$name/audio/Inst';
+		if (hasSongAudioFolder(name, checkMods)) songKey = '$name/audio/Inst';
 		
 		if (postFix != null) songKey += '-$postFix';
 		
@@ -218,6 +218,30 @@ class Paths
 		if (ClientPrefs.streamedMusic) return FunkinAssets.getVorbisSound(songKey) ?? FunkinAssets.getSound(songKey);
 		
 		return FunkinAssets.getSound(songKey);
+	}
+	
+	static function hasSongAudioFolder(songName:String, checkMods:Bool = true):Bool
+	{
+		final rel = 'songs/$songName/audio';
+		
+		#if MODS_ALLOWED
+		if (checkMods)
+		{
+			if (Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0)
+			{
+				if (FunkinAssets.isDirectory(mods('${Mods.currentModDirectory}/$rel'))) return true;
+			}
+			
+			for (mod in Mods.globalMods)
+			{
+				if (FunkinAssets.isDirectory(mods('$mod/$rel'))) return true;
+			}
+			
+			if (FunkinAssets.isDirectory(mods(rel))) return true;
+		}
+		#end
+		
+		return FunkinAssets.isDirectory(getCorePath(rel));
 	}
 	
 	/**
@@ -447,7 +471,7 @@ class Paths
 		{
 			final fileToCheck:String = mods(Mods.currentModDirectory + '/' + key);
 			// trace(fileToCheck);
-			if (FunkinAssets.exists(fileToCheck))
+			if (FunkinAssets.exists(fileToCheck) || FunkinAssets.isDirectory(fileToCheck))
 			{
 				return fileToCheck;
 			}
@@ -456,7 +480,7 @@ class Paths
 		for (mod in Mods.globalMods)
 		{
 			final fileToCheck:String = mods(mod + '/' + key);
-			if (FunkinAssets.exists(fileToCheck)) return fileToCheck;
+			if (FunkinAssets.exists(fileToCheck) || FunkinAssets.isDirectory(fileToCheck)) return fileToCheck;
 		}
 		return mods(key);
 	}

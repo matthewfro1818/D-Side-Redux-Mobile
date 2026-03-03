@@ -174,6 +174,11 @@ vec4 pass1(vec2 uv)
 void main()
 {
 	vec2 uv = openfl_TextureCoordv;
+	if (uInterlace <= 0.0001) {
+		gl_FragColor = texture2D(bitmap, uv);
+		return;
+	}
+
 	vec2 fragCoord = uv * openfl_TextureSize;
 
 	float one_x = 1.0 / openfl_TextureSize.x;
