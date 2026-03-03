@@ -6,7 +6,7 @@ jobs:
   build:
     name: iOS Build
     permissions: write-all
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -24,7 +24,11 @@ jobs:
          haxelib remove lime
          haxelib git lime https://github.com/ArkoseLabsOfficial/lime main --quiet
          haxelib run lime rebuild hxcpp
-         haxelib run lime setup ios
+         
+      - name: Configure iOS
+        run: |
+          haxelib run lime setup ios
+          
       - name: Compile
         run: haxelib run lime build ios -nosign
 
