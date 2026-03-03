@@ -24,6 +24,7 @@ jobs:
          haxelib remove lime
          haxelib git lime https://github.com/ArkoseLabsOfficial/lime main --quiet
          haxelib run lime rebuild hxcpp
+         haxelib run lime setup ios
       - name: Compile
         run: haxelib run lime build ios -nosign
 
