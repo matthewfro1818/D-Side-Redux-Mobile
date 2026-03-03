@@ -22,9 +22,7 @@ jobs:
          haxelib run hxpkg setup --global
          haxelib run hxpkg install
          haxelib remove lime
-         haxelib remove flixel
-         haxelib git lime https://github.com/FunkinCrew/lime mobile/main --quiet
-         haxelib git flixel https://github.com/JS-Engine-things/flixel-JS-Engine
+         haxelib git lime https://github.com/ArkoseLabsOfficial/lime main --quiet
          haxelib run lime rebuild hxcpp
       - name: Compile
         run: haxelib run lime build ios -nosign
