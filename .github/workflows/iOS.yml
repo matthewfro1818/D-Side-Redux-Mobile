@@ -6,7 +6,7 @@ jobs:
   build:
     name: iOS Build
     permissions: write-all
-    runs-on: macos-26
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@main
