@@ -22,7 +22,9 @@ jobs:
          haxelib run hxpkg setup --global
          haxelib run hxpkg install
          haxelib remove lime
-         haxelib git lime https://github.com/ArkoseLabsOfficial/lime main --quiet
+         haxelib remove hxcpp
+         haxelib git lime https://github.com/FunkinCrew/lime mobile/main --quiet
+         haxelib git hxcpp https://github.com/FunkinCrew/hxcpp 5932340d095a7eea8635fe4d1355f1c0efd0b3c2 --quiet
          haxelib run lime rebuild hxcpp
          
       - name: Configure iOS
