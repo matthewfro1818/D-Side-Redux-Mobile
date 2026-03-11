@@ -93,6 +93,7 @@ class DiscordClient
 		}
 		
 		initiated = true;
+		#end
 	}
 	
 	#if !android
