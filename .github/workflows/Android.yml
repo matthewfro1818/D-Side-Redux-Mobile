@@ -15,6 +15,12 @@ jobs:
         uses: krdlab/setup-haxe@master
         with:
           haxe-version: 4.3.7
+          
+      - name: Install Libraries
+        run: |
+         haxelib install hxpkg --global
+         haxelib run hxpkg setup --global
+         haxelib run hxpkg install
 
       - name: Restore Cache
         uses: actions/cache@v4
