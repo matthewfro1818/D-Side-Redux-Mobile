@@ -4,7 +4,8 @@
         "pkgs": [
             {
                 "name": "flixel",
-                "version": "6.0.0"
+                "link": "https://github.com/FunkinCrew/flixel",
+                "branch": "c8e79d2a42f9c11c639519ef2a6fd7ef2379a8aa"
             },
             {
                 "name": "flixel-addons",
@@ -17,7 +18,7 @@
             {
                 "name": "flixel-animate",
                 "link": "https://github.com/MaybeMaru/flixel-animate",
-                "branch": "5decd2e91dfdb62c235aaa344303d9b2d77c83d5"
+                "branch": "c5e3393c70b71a191f20fa902114cea92042e486"
             },
             {
                 "name": "hscript",
