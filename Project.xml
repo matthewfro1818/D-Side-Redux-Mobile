@@ -38,7 +38,7 @@
     <!--ENGINE CUSTOMIZATION-->
     <define name="MODS_ALLOWED" if="desktop || mobile" />
     <define name="VIDEOS_ALLOWED" if="cpp" />
-    <define name="DISCORD_ALLOWED" if="cpp" unless="mobile"/>
+    <define name="DISCORD_ALLOWED" if="cpp" unless="ios"/>
 
     <!-- _____________________________ Path Settings ____________________________ -->
 
@@ -89,7 +89,9 @@
     <!--Mobile libraries-->
 	<haxelib name="extension-androidtools" if="android"/>
 
-    <haxelib name="hxdiscord_rpc" if="DISCORD_ALLOWED" version="1.2.4"/>
+    <section if="desktop">
+	    <haxelib name="hxdiscord_rpc" if="DISCORD_ALLOWED" version="1.2.4"/>
+    </section>
     <haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
 
     <!-- ______________________________ macros _____________________________ -->
@@ -128,20 +130,20 @@
     
     <!-- Mobile Shit -->
     <section if="android">
-	<config:android permission="android.permission.VIBRATE" />
-	<config:android permission="android.permission.INTERNET" />
-	<config:android permission="android.permission.ACCESS_WIFI_STATE"/>
-	<config:android permission="android.permission.ACCESS_NETWORK_STATE" />
-	<config:android permission="android.permission.CAPTURE_AUDIO_OUTPUT" />
-	<android target-sdk-version="34" />
-	<android min-sdk-version="19" />
-	<certificate path="key.keystore" password="nightport" alias="nightport" alias-password="nightport" unless="test" />
+		<config:android permission="android.permission.VIBRATE" />
+		<config:android permission="android.permission.INTERNET" />
+		<config:android permission="android.permission.ACCESS_WIFI_STATE"/>
+		<config:android permission="android.permission.ACCESS_NETWORK_STATE" />
+		<config:android permission="android.permission.CAPTURE_AUDIO_OUTPUT" />
+		<android target-sdk-version="34" />
+		<android min-sdk-version="19" />
+		<certificate path="key.keystore" password="nightport" alias="nightport" alias-password="nightport" unless="test" />
     </section>
     
     <!-- IOS stuff -->
     <section if="ios">
-	<config:ios category_type="public.app-category.music-games" />
-	<config:mac category_type="public.app-category.music-games" />
+		<config:ios category_type="public.app-category.music-games" />
+		<config:mac category_type="public.app-category.music-games" />
 	</section>
 
     <haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER"/>
@@ -187,6 +189,10 @@
     <!--<haxedef name="FLX_NO_SOUND_SYSTEM" />-->
 
     <!-- _________________________________ Custom _______________________________ -->
+    	
+    <!-- Basic Support For Kizzy -->
+	<java path="source/mobile/android/" if="android" />
+	<java path="mobile/android/" if="android" />
 
     <icon path="projFiles/icon/icon16.png" size='16'/>
     <icon path="projFiles/icon/icon32.png" size='32'/>

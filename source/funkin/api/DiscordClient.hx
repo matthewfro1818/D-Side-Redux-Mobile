@@ -3,10 +3,14 @@ package funkin.api;
 #if DISCORD_ALLOWED
 import sys.thread.Thread;
 
+#if !android
 import hxdiscord_rpc.Types.DiscordEventHandlers;
 import hxdiscord_rpc.Types.DiscordUser;
 import hxdiscord_rpc.Discord;
 import hxdiscord_rpc.Types.DiscordRichPresence;
+#else
+import mobile.android.AndroidRPC;
+#end
 
 class DiscordClient
 {
@@ -37,7 +41,9 @@ class DiscordClient
 	 * 
 	 * use `changePresence` to change the displayed presence
 	 */
+	#if !android
 	public static final discordPresence:DiscordRichPresence = DiscordRichPresence.create();
+	#end
 	
 	/**
 	 * The string value of the currently connected discord user.
@@ -50,6 +56,14 @@ class DiscordClient
 	 */
 	public static function init()
 	{
+	    #if android
+		if(initiated) 
+		{
+			AndroidRPC.initialize();
+			trace("Discord Client (Android) initialized");
+			initiated = true;
+		}
+		#else
 		final discordEventHandlers = DiscordEventHandlers.create();
 		
 		discordEventHandlers.ready = cpp.Function.fromStaticFunction(onReady);
@@ -81,6 +95,7 @@ class DiscordClient
 		initiated = true;
 	}
 	
+	#if !android
 	/**
 	 * Triggered when discord connection fails.
 	 */
@@ -96,16 +111,18 @@ class DiscordClient
 	{
 		Logger.log('Discord Disconnected. [$errorCode: ${(cast message : String)}]');
 	}
+	#end
 	
 	/**
 	 * Shuts down the current discord RPC
 	 */
 	public static function close():Void
 	{
-		if (initiated) Discord.Shutdown();
+		if (initiated) #if android AndroidRPC.shutdown(); #else Discord.Shutdown(); #end
 		initiated = false;
 	}
 	
+	#if !android
 	/**
 	 * Triggered when discord connection is successfully connected
 	 */
@@ -121,6 +138,7 @@ class DiscordClient
 		
 		changePresence();
 	}
+	#end
 	
 	/**
 	 * Helper function to change the current RPC presence more easily
@@ -137,6 +155,9 @@ class DiscordClient
 		
 		if (endTimestamp > 0) endTimestamp = startTimestamp + endTimestamp;
 		
+		#if android
+		AndroidRPC.update(details, state, largeImageKey);
+		#else
 		discordPresence.state = state;
 		discordPresence.details = details;
 		discordPresence.smallImageKey = smallImageKey;
@@ -146,6 +167,7 @@ class DiscordClient
 		discordPresence.endTimestamp = Std.int(endTimestamp / 1000);
 		
 		updatePresence();
+		#end
 	}
 	
 	/**
@@ -155,7 +177,7 @@ class DiscordClient
 	 */
 	static function updatePresence():Void
 	{
-		Discord.UpdatePresence(cpp.RawConstPointer.addressOf(discordPresence));
+		#if !android Discord.UpdatePresence(cpp.RawConstPointer.addressOf(discordPresence)); #end
 	}
 	
 	static function set_rpcId(value:String):String
