@@ -68,10 +68,16 @@ function onCreatePost() {
 }
 
 function setupNote(note) {
-	note.reloadNote('ice/');
+	note.reloadNote('ice/', 'UI/game/notes/NOTE_assets');
 	note.noAnimation = true;
-	note.hitCausesMiss = true;
-	note.rgbShader.setColors([0xFFFF0000, 0xFF00FF00, 0xFF0000FF]);
+	note.canMiss = true;
+	note.rgbEnabled = false;
+	note.setCustomColor([0xFF1c5d8b, 0xFFcdf9f4, 0xFF1c5d8b]);
+}
+
+function postSpawnNote(note) {
+	note.rgbEnabled = false;
+	note.defScale.set(0.7, 0.7);
 }
 
 var isFrozen = false;
@@ -86,7 +92,7 @@ function goodNoteHit(note) {
 		boyfriend.playAnim('frozen');
 		snowgrave.visible = true;
 
-		playerStrums.inControl = false;
+		getFieldFromID(0).inControl = false;
 		black.alpha = 0.75;
 		for (i in iceReceptors)
 			i.visible = true;
@@ -106,19 +112,17 @@ function struggle() {
 		makeIceChunk();
 }
 
-
 // if ur frozen going into a section you Shouldnt be frozen in
-function forcebreak()
-{
-	if(isFrozen)
+function forcebreak() {
+	if (isFrozen)
 		breakout();
-	
 
-	FlxTimer.wait(0.5, ()->{
-		for(chunk in icechunks.members){
-			if(chunk.visible) chunk.visible = false;
+	FlxTimer.wait(0.5, () -> {
+		for (chunk in icechunks.members) {
+			if (chunk.visible)
+				chunk.visible = false;
 		}
-	});		
+	});
 }
 
 function breakout() {
@@ -130,7 +134,7 @@ function breakout() {
 	boyfriend.canDance = true;
 	boyfriend.dance();
 
-	playerStrums.inControl = true;
+	getFieldFromID(0).inControl = true;
 	black.alpha = 0;
 	for (i in iceReceptors)
 		i.visible = false;
@@ -162,7 +166,7 @@ function onUpdate(elapsed) {
 	if (keycooldown > 0) {
 		keycooldown -= (1) * (elapsed * 60);
 
-		if (keycooldown <= 0) 
+		if (keycooldown <= 0)
 			keycooldown = 0;
 	}
 
@@ -191,7 +195,8 @@ function makeIceChunk() {
 	var dir = FlxG.random.bool(50) ? 1 : -1;
 
 	chunkY = (FlxG.random.int(snowgrave.y, snowgrave.y + snowgrave.height));
-	var icechunk = new FlxSprite(dir == 1 ? snowgrave.x + snowgrave.width + 400 : snowgrave.x, chunkY).setFrames(Paths.getSparrowAtlas('characters/BF/wolf/BF_Ice'));
+	var icechunk = new FlxSprite(dir == 1 ? snowgrave.x + snowgrave.width + 400 : snowgrave.x,
+		chunkY).setFrames(Paths.getSparrowAtlas('characters/BF/wolf/BF_Ice'));
 	icechunk.animation.addByPrefix('idle', 'ChunkIce', 0, false);
 	icechunk.animation.play('idle');
 	icechunk.animation.curAnim.curFrame = FlxG.random.int(0, 3);
@@ -216,20 +221,20 @@ function makeIceChunk() {
 
 	icechunks.add(icechunk);
 	FlxTimer.wait(5, () -> {
-		FlxTween.tween(icechunk, {alpha: 0}, 2, {onComplete: () ->{
-			icechunk.visible = false;
-			icechunk.kill();
-		}});
+		FlxTween.tween(icechunk, {alpha: 0}, 2, {
+			onComplete: () -> {
+				icechunk.visible = false;
+				icechunk.kill();
+			}
+		});
 	});
-
-
 }
 
 function onKeyPress(key) {
 	if (isFrozen && keycooldown == 0) {
-		if (frozenCounter % 2 == 0 && (controls.NOTE_LEFT_P || hitbox.buttonLeft.justPressed))
+		if (frozenCounter % 2 == 0 && controls.NOTE_LEFT_P)
 			struggle();
-		else if (controls.NOTE_RIGHT_P || hitbox.buttonRight.justPressed)
+		else if (controls.NOTE_RIGHT_P)
 			struggle();
 
 		leftReceptor.color = frozenCounter % 2 == 0 ? FlxColor.WHITE : 0xFF4a4a4a;

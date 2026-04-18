@@ -1,10 +1,14 @@
 import animate.internal.Layer;
+import funkin.scripting.PluginsManager;
 
 var poop;
 var angleAdd = 0;
 var offsets = [0, 0];
 
 function onLoad() {
+	if (PluginsManager.callPluginFunc('Utils', 'getV1Percent', []) < 100)
+		return;
+
 	offsets = [40, 10];
 	angleAdd = 22;
 	// offsets = [-5, 30];

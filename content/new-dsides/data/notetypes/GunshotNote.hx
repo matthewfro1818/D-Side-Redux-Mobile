@@ -3,11 +3,17 @@ import funkin.backend.Conductor;
 var sSize = Conductor.stepCrotchet / 1000;
 
 function setupNote(note) {
-	if(ClientPrefs.mechanics){
+	if (ClientPrefs.mechanics) {
 		note.hitCausesMiss = false;
 		note.noAnimation = true;
 	}
+	note.rgbEnabled = false;
+	note.setCustomColor([0xFFFFFFFF, 0xFF000000, 0xFFFFFFFF]);
 	note.reloadNote('bullet/');
+}
+
+function postSpawnNote(note) {
+	note.rgbEnabled = false;
 }
 
 var game = PlayState.instance;
@@ -27,10 +33,10 @@ function goodNoteHit(note) {
 }
 
 function opponentNoteHit(note) {
-	if (note.noteType == 'GunshotNote'){
+	if (note.noteType == 'GunshotNote') {
 		shoot();
 
-		if(!ClientPrefs.mechanics){
+		if (!ClientPrefs.mechanics) {
 			boyfriend.playAnim(dodge_notes[note.noteData], true);
 			boyfriend.holdTimer = 0;
 		}
@@ -38,6 +44,7 @@ function opponentNoteHit(note) {
 }
 
 var poop = 1;
+
 function shoot() {
 	FlxTween.cancelTweensOf(camGame, ['angle']);
 	camGame.zoom += 0.0625 / 4;

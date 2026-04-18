@@ -13,10 +13,14 @@ function onLoad() {
 }
 
 function setupNote(note) {
-	note.reloadNote('gum/');
-	note.hitCausesMiss = true;
+	note.reloadNote('gum/', 'UI/game/notes/NOTE_assets');
 	note.canMiss = true;
-	note.rgbShader.setColors([0xFFFF0000, 0xFF00FF00, 0xFF0000FF]);
+}
+
+function postSpawnNote(note) {
+	note.rgbEnabled = false;
+	note.defScale.set(.7, .7);
+	note.setCustomColor([0xFFB46DA1, 0xFFFF9FE5, 0xFFB46DA1]);
 }
 
 var gumCount = 0;

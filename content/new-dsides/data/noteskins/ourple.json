@@ -1,5 +1,5 @@
 {
-	"extraSkin": "UI/game/ourple hud/NOTE_assets",
+	"noteTexture": "UI/game/ourple hud/ourple_notes",
 	"singAnimations": [
 		"singLEFT",
 		"singDOWN",
@@ -7,7 +7,7 @@
 		"singRIGHT"
 	],
 	"splashesEnabled": true,
-	"playerSkin": "UI/game/ourple hud/ourple_notes",
+    "susSplashesEnabled": false,
 	"receptorAnimations": [
 		[
 			{
@@ -189,32 +189,32 @@
 		{
 			"xmlName": "note splash purple 1",
 			"offsets": [
-				-30,
-				-22
+			    0,
+				0
 			],
 			"anim": "note0"
 		},
 		{
 			"xmlName": "note splash blue 1",
-			"offsets": [
-				-40,
-				-20
+            "offsets": [
+			    0,
+				0
 			],
 			"anim": "note1"
 		},
 		{
 			"xmlName": "note splash green 1",
-			"offsets": [
-				-30,
-				-10
+            "offsets": [
+			    0,
+				0
 			],
 			"anim": "note2"
 		},
 		{
 			"xmlName": "note splash red 1",
-			"offsets": [
-				-30,
-				-10
+            "offsets": [
+			    0,
+				0
 			],
 			"anim": "note3"
 		},
@@ -368,12 +368,13 @@
 		4,
 		5
 	],
-	"noteSplashSkin": "UI/game/ourple hud/ourple_splashes",
+	"splashTexture": "UI/game/ourple hud/ourple_splashes",
 	"globalSkin": "UI/game/ourple hud/ourple_notes",
 	"antialiasing": false,
 	"inGameColoring": false,
 	"isPixel": false,
 	"opponentSkin": "UI/game/ourple hud/ourple_notes",
 	"scale": 0.7,
-	"sustainSuffix": "ENDS"
+	"sustainSuffix": "ENDS",
+    "susSplashOrigin": [-10, -15]
 }

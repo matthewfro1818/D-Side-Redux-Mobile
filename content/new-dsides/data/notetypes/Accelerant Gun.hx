@@ -3,14 +3,16 @@ import funkin.backend.Conductor;
 var sSize = Conductor.stepCrotchet / 1000;
 
 function setupNote(note) {
-	if(ClientPrefs.mechanics){
+	if (ClientPrefs.mechanics) {
 		note.hitCausesMiss = false;
 		note.noAnimation = true;
 	}
 	note.reloadNote('accel/');
-	note.rgbShader.setColors([0xFFfe600, FlxColor.WHITE, 0xFF7d6919]);
-	note.rgbShader.enabled = false;
-	note.typeOffsetX = 15;
+	note.setCustomColor([0xFFfe600, FlxColor.WHITE, 0xff75705d]);
+}
+
+function postSpawnNote(note) {
+	note.rgbEnabled = false;
 }
 
 var game = PlayState.instance;
@@ -30,13 +32,12 @@ function goodNoteHit(note) {
 }
 
 function opponentNoteHit(note) {
-	if (note.noteType == 'Accelerant Gun'){
+	if (note.noteType == 'Accelerant Gun') {
 		shoot();
 		var poop = (StringTools.replace(dodge_notes[note.noteData], 'dodge', 'shoot'));
 		dad.playAnim(poop, true);
 		dad.holdTimer = 0;
-
-		if(!ClientPrefs.mechanics){
+		if (!ClientPrefs.mechanics) {
 			boyfriend.playAnim(dodge_notes[note.noteData], true);
 			boyfriend.holdTimer = 0;
 		}
@@ -44,6 +45,7 @@ function opponentNoteHit(note) {
 }
 
 var poop = 1;
+
 function shoot() {
 	FlxTween.cancelTweensOf(camGame, ['angle']);
 	camGame.zoom += 0.0625 / 4;

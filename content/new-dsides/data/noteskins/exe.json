@@ -1,5 +1,5 @@
 {
-	"extraSkin": "NOTE_assets",
+	"noteTexture": "UI/game/notes/EXE_Notes",
 	"singAnimations": [
 		"singLEFT",
 		"singDOWN",
@@ -7,121 +7,121 @@
 		"singRIGHT"
 	],
 	"splashesEnabled": true,
-	"playerSkin": "NOTE_assets",
 	"receptorAnimations": [
 		[
 			{
-				"looping": false,
+				"xmlName": "arrowLEFT",
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "arrowLEFT",
+				"looping": false,
 				"anim": "static"
 			},
 			{
-				"looping": false,
+				"xmlName": "left press",
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "left press",
+				"looping": false,
 				"anim": "pressed"
 			},
 			{
-				"looping": false,
-				"offsets": [
-					-1,
-					-1
-				],
 				"xmlName": "left confirm",
+				"offsets": [
+					2,
+					0
+				],
+				"looping": false,
 				"anim": "confirm"
 			}
 		],
 		[
 			{
-				"looping": false,
+				"xmlName": "arrowDOWN",
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "arrowDOWN",
+				"looping": false,
 				"anim": "static"
 			},
 			{
-				"looping": false,
+				"xmlName": "down press",
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "down press",
+				"looping": false,
 				"anim": "pressed"
 			},
 			{
+				"xmlName": "down confirm",
+				"offsets": [
+					0,
+					-2
+				],
 				"looping": false,
+				"anim": "confirm"
+			}
+		],
+		[
+			{
+				"xmlName": "arrowUP",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "static"
+			},
+			{
+				"xmlName": "up press",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "pressed"
+			},
+			{
+				"xmlName": "up confirm",
+				"offsets": [
+					-1,
+					2
+				],
+				"looping": false,
+				"anim": "confirm"
+			}
+		],
+		[
+			{
+				"offsets": [
+					0,
+					0
+				],
+				"anim": "static",
+				"looping": false,
+				"xmlName": "arrowRIGHT",
+				"color": null
+			},
+			{
+				"xmlName": "right press",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "pressed"
+			},
+			{
+				"xmlName": "right confirm",
 				"offsets": [
 					-2,
-					0
+					-4
 				],
-				"xmlName": "down confirm",
-				"anim": "confirm"
-			}
-		],
-		[
-			{
 				"looping": false,
-				"offsets": [
-					0,
-					0
-				],
-				"xmlName": "arrowUP",
-				"anim": "static"
-			},
-			{
-				"looping": false,
-				"offsets": [
-					0,
-					0
-				],
-				"xmlName": "up press",
-				"anim": "pressed"
-			},
-			{
-				"looping": false,
-				"offsets": [
-					-1,
-					-1
-				],
-				"xmlName": "up confirm",
-				"anim": "confirm"
-			}
-		],
-		[
-			{
-				"looping": false,
-				"offsets": [
-					0,
-					0
-				],
-				"xmlName": "arrowRIGHT",
-				"anim": "static"
-			},
-			{
-				"looping": false,
-				"offsets": [
-					0,
-					0
-				],
-				"xmlName": "right press",
-				"anim": "pressed"
-			},
-			{
-				"looping": false,
-				"offsets": [
-					-1,
-					0
-				],
-				"xmlName": "right confirm",
 				"anim": "confirm"
 			}
 		]
@@ -129,156 +129,238 @@
 	"noteSplashAnimations": [
 		{
 			"offsets": [
-				4,
-				55
+				-3,
+				7
 			],
 			"xmlName": "SplashLol",
-			"looping": false,
 			"anim": "note0"
 		},
 		{
 			"offsets": [
-				17,
-				65
+				3,
+				19
 			],
 			"xmlName": "SplashLol",
-			"looping": false,
 			"anim": "note1"
 		},
 		{
 			"offsets": [
-				24,
-				64
+				8,
+				6
 			],
 			"xmlName": "SplashLol",
-			"looping": false,
 			"anim": "note2"
 		},
 		{
 			"offsets": [
-				22,
-				55
+				10,
+				8
 			],
 			"xmlName": "SplashLol",
-			"looping": false,
 			"anim": "note3"
 		}
 	],
 	"noteAnimations": [
 		[
 			{
-				"looping": false,
-				"offsets": [
-					0,
-					0
-				],
 				"xmlName": "purple",
-				"anim": "scroll0"
-			},
-			{
-				"looping": false,
 				"offsets": [
 					0,
 					0
 				],
+				"looping": false,
+				"anim": "scroll"
+			},
+			{
 				"xmlName": "purple hold piece",
-				"anim": "hold0"
-			},
-			{
-				"looping": false,
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "purple hold end",
-				"anim": "holdend0"
+				"looping": false,
+				"anim": "hold"
+			},
+			{
+				"xmlName": "pruple end hold",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "holdend"
 			}
 		],
 		[
 			{
-				"looping": false,
-				"offsets": [
-					0,
-					0
-				],
 				"xmlName": "blue",
-				"anim": "scroll1"
-			},
-			{
-				"looping": false,
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "blue hold piece",
-				"anim": "hold1"
+				"looping": false,
+				"anim": "scroll"
 			},
 			{
-				"looping": false,
+				"xmlName": "purple hold piece",
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "blue hold end",
-				"anim": "holdend1"
+				"looping": false,
+				"anim": "hold"
+			},
+			{
+				"xmlName": "pruple end hold",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "holdend"
 			}
 		],
 		[
 			{
-				"looping": false,
-				"offsets": [
-					0,
-					0
-				],
 				"xmlName": "green",
-				"anim": "scroll2"
-			},
-			{
-				"looping": false,
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "green hold piece",
-				"anim": "hold2"
+				"looping": false,
+				"anim": "scroll"
 			},
 			{
-				"looping": false,
+				"xmlName": "purple hold piece",
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "green hold end",
-				"anim": "holdend2"
+				"looping": false,
+				"anim": "hold"
+			},
+			{
+				"xmlName": "pruple end hold",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "holdend"
 			}
 		],
 		[
 			{
-				"looping": false,
-				"offsets": [
-					0,
-					0
-				],
 				"xmlName": "red",
-				"anim": "scroll3"
-			},
-			{
-				"looping": false,
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "red hold piece",
-				"anim": "hold3"
+				"looping": false,
+				"anim": "scroll"
 			},
 			{
-				"looping": false,
+				"xmlName": "purple hold piece",
 				"offsets": [
 					0,
 					0
 				],
-				"xmlName": "red hold end",
-				"anim": "holdend3"
+				"looping": false,
+				"anim": "hold"
+			},
+			{
+				"xmlName": "pruple end hold",
+				"offsets": [
+					0,
+					0
+				],
+				"looping": false,
+				"anim": "holdend"
+			}
+		]
+	],
+	"susSplashAnimations": [
+		[
+			{
+				"anim": "start",
+				"xmlName": "start",
+				"offsets": [0, 0],
+				"looping": false
+			},
+			{
+				"anim": "loop",
+				"xmlName": "loop",
+				"offsets": [-10, 15],
+				"looping": true,
+				"fps": 12
+			},
+			{
+				"anim": "end",
+				"xmlName": "end",
+				"offsets": [0, 0],
+				"looping": false
+			}
+		],
+		[
+			{
+				"anim": "start",
+				"xmlName": "start",
+				"offsets": [0, 0],
+				"looping": false
+			},
+			{
+				"anim": "loop",
+				"xmlName": "loop",
+				"offsets": [-10, 15],
+				"looping": true,
+				"fps": 12
+			},
+			{
+				"anim": "end",
+				"xmlName": "end",
+				"offsets": [0, 0],
+				"looping": false
+			}
+		],
+		[
+			{
+				"anim": "start",
+				"xmlName": "start",
+				"offsets": [0, 0],
+				"looping": false
+			},
+			{
+				"anim": "loop",
+				"xmlName": "loop",
+				"offsets": [-10, 15],
+				"looping": true,
+				"fps": 12
+			},
+			{
+				"anim": "end",
+				"xmlName": "end",
+				"offsets": [0, 0],
+				"looping": false
+			}
+		],
+		[
+			{
+				"anim": "start",
+				"xmlName": "start",
+				"offsets": [0, 0],
+				"looping": false
+			},
+			{
+				"anim": "loop",
+				"xmlName": "loop",
+				"offsets": [-10, 15],
+				"looping": true,
+				"fps": 12
+			},
+			{
+				"anim": "end",
+				"xmlName": "end",
+				"offsets": [0, 0],
+				"looping": false
 			}
 		]
 	],
@@ -286,12 +368,11 @@
 		4,
 		5
 	],
-	"noteSplashSkin": "UI/game/notes/BloodSplash",
-	"globalSkin": "NOTE_assets",
+	"splashTexture": "UI/game/notes/NoteSplash",
 	"antialiasing": true,
 	"inGameColoring": true,
 	"isPixel": false,
-	"opponentSkin": "NOTE_assets",
-	"scale": 0.7,
-	"sustainSuffix": "ENDS"
+	"receptorScale": 0.6,
+	"noteScale": 0.6,
+    "susSplashOrigin": [-10, 15]
 }

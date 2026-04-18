@@ -1,5 +1,5 @@
 {
-	"extraSkin": "UI/game/notes/NOTE_assets",
+	"noteTexture": "UI/game/notes/NOTE_assets",
 	"singAnimations": [
 		"singLEFT",
 		"singDOWN",
@@ -7,7 +7,6 @@
 		"singRIGHT"
 	],
 	"splashesEnabled": true,
-	"playerSkin": "UI/game/notes/NOTE_assets",
 	"receptorAnimations": [
 		[
 			{
@@ -170,7 +169,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "scroll0"
+				"anim": "scroll"
 			},
 			{
 				"xmlName": "purple hold piece",
@@ -179,7 +178,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "hold0"
+				"anim": "hold"
 			},
 			{
 				"xmlName": "pruple end hold",
@@ -188,7 +187,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "holdend0"
+				"anim": "holdend"
 			}
 		],
 		[
@@ -199,7 +198,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "scroll1"
+				"anim": "scroll"
 			},
 			{
 				"xmlName": "purple hold piece",
@@ -208,7 +207,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "hold1"
+				"anim": "hold"
 			},
 			{
 				"xmlName": "pruple end hold",
@@ -217,7 +216,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "holdend1"
+				"anim": "holdend"
 			}
 		],
 		[
@@ -228,7 +227,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "scroll2"
+				"anim": "scroll"
 			},
 			{
 				"xmlName": "purple hold piece",
@@ -237,7 +236,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "hold2"
+				"anim": "hold"
 			},
 			{
 				"xmlName": "pruple end hold",
@@ -246,7 +245,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "holdend2"
+				"anim": "holdend"
 			}
 		],
 		[
@@ -257,7 +256,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "scroll3"
+				"anim": "scroll"
 			},
 			{
 				"xmlName": "purple hold piece",
@@ -266,7 +265,7 @@
 					0
 				],
 				"looping": false,
-				"anim": "hold3"
+				"anim": "hold"
 			},
 			{
 				"xmlName": "pruple end hold",
@@ -275,20 +274,104 @@
 					0
 				],
 				"looping": false,
-				"anim": "holdend3"
+				"anim": "holdend"
 			}
 		]
 	],
-	"pixelSize": [
+	"susSplashAnimations": [
+		[
+			{
+				"anim": "start",
+				"xmlName": "start",
+				"offsets": [0, 0],
+				"looping": false
+			},
+			{
+				"anim": "loop",
+				"xmlName": "loop",
+				"offsets": [-10, 15],
+				"looping": true,
+				"fps": 12
+			},
+			{
+				"anim": "end",
+				"xmlName": "end",
+				"offsets": [0, 0],
+				"looping": false
+			}
+		],
+		[
+			{
+				"anim": "start",
+				"xmlName": "start",
+				"offsets": [0, 0],
+				"looping": false
+			},
+			{
+				"anim": "loop",
+				"xmlName": "loop",
+				"offsets": [-10, 15],
+				"looping": true,
+				"fps": 12
+			},
+			{
+				"anim": "end",
+				"xmlName": "end",
+				"offsets": [0, 0],
+				"looping": false
+			}
+		],
+		[
+			{
+				"anim": "start",
+				"xmlName": "start",
+				"offsets": [0, 0],
+				"looping": false
+			},
+			{
+				"anim": "loop",
+				"xmlName": "loop",
+				"offsets": [-10, 15],
+				"looping": true,
+				"fps": 12
+			},
+			{
+				"anim": "end",
+				"xmlName": "end",
+				"offsets": [0, 0],
+				"looping": false
+			}
+		],
+		[
+			{
+				"anim": "start",
+				"xmlName": "start",
+				"offsets": [0, 0],
+				"looping": false
+			},
+			{
+				"anim": "loop",
+				"xmlName": "loop",
+				"offsets": [-10, 15],
+				"looping": true,
+				"fps": 12
+			},
+			{
+				"anim": "end",
+				"xmlName": "end",
+				"offsets": [0, 0],
+				"looping": false
+			}
+		]
+	],
+    "pixelSize": [
 		4,
 		5
 	],
-	"noteSplashSkin": "UI/game/notes/NoteSplash",
-	"globalSkin": "UI/game/notes/NOTE_assets",
+	"splashTexture": "UI/game/notes/NoteSplash",
 	"antialiasing": true,
 	"inGameColoring": true,
 	"isPixel": false,
-	"opponentSkin": "UI/game/notes/NOTE_assets",
-	"scale": 0.7,
-	"sustainSuffix": "ENDS"
+	"sustainSuffix": "ENDS",
+	"susSplashOrigin": [-10, 15]
 }

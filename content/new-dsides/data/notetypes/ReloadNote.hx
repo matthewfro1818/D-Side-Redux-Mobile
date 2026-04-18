@@ -3,3 +3,7 @@ function setupNote(note) {
 	note.noAnimation = true;
 	note.reloadNote('bullet/');
 }
+
+function postSpawnNote(note) {
+	note.rgbEnabled = false;
+}
