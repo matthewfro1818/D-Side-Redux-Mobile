@@ -1,6 +1,12 @@
 name: iOS Build
 
-on: workflow_dispatch
+on:
+  push:
+    branches: [ main, experimental ]
+  pull_request:
+    branches: [ main, experimental ]
+
+  workflow_dispatch:
 
 jobs:
   build:
