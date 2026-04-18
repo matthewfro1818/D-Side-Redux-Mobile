@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="marios 2.png">
+	<!-- Created with Adobe Animate version 19.2.1.408 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Marios0000" x="354" y="332" width="355" height="318" frameX="0" frameY="-23" frameWidth="355" frameHeight="342"/>
+	<SubTexture name="Marios0001" x="354" y="332" width="355" height="318" frameX="0" frameY="-23" frameWidth="355" frameHeight="342"/>
+	<SubTexture name="Marios0002" x="353" y="0" width="352" height="327" frameX="-2" frameY="-14" frameWidth="355" frameHeight="342"/>
+	<SubTexture name="Marios0003" x="353" y="0" width="352" height="327" frameX="-2" frameY="-14" frameWidth="355" frameHeight="342"/>
+	<SubTexture name="Marios0004" x="0" y="0" width="348" height="342" frameX="-4" frameY="0" frameWidth="355" frameHeight="342"/>
+	<SubTexture name="Marios0005" x="0" y="0" width="348" height="342" frameX="-4" frameY="0" frameWidth="355" frameHeight="342"/>
+	<SubTexture name="Marios0006" x="0" y="347" width="349" height="334" frameX="-3" frameY="-8" frameWidth="355" frameHeight="342"/>
+	<SubTexture name="Marios0007" x="0" y="347" width="349" height="334" frameX="-3" frameY="-8" frameWidth="355" frameHeight="342"/>
+</TextureAtlas>
