@@ -1,34 +1,94 @@
-name: Mobile-Ios
+# THE FOLLOWING ACTIONS CODE IS FROM THE PSYCH ENGINE REPO: https://github.com/ShadowMario/FNF-PsychEngine/blob/main/.github/workflows/main.yml
 
+name: Build
+
+# Controls when the action will run.
 on:
-  push:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  pull_request:
     branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  Build-iOS:
-    runs-on: macos-latest
+  # This workflow contains a single job called "build"
+  buildLinux:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Determine Version
-        id: ver
-        run: |
-          if git describe --tags --exact-match >/dev/null 2>&1; then
-            echo "version=$(git describe --tags --exact-match)" >> $GITHUB_OUTPUT
-          else
-            echo "version=dev-$(date +'%Y%m%d-%H%M')" >> $GITHUB_OUTPUT
-          fi
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4.1.7
 
       - uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.6
-
-      - name: Install Haxelib Dependencies
+          haxe-version: 4.3.4
+      # Runs a set of commands using the runners shell
+      - name: Install Haxelib
         run: |
+          sudo apt-get install libvlc-dev libvlccore-dev glibc-source libidn-dev libidn12
+          haxelib setup ~/haxelib
+          haxelib install hmm
+          haxelib run hmm setup
+          hmm install
+          haxelib list
+      - name: Create Version Tag
+        run: echo "${{github.run_id}}" > VERSION
+      - name: Compile
+        run: haxelib run lime build Project.xml linux --app-version="4.0.0-${{ github.run_id}}"
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linuxBuild
+          path: 'export/release/linux/bin'
+  buildWindows:
+    runs-on: windows-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4.1.7
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+      - name: Setup Haxe Path
+        run: |
+          setx HAXEPATH "C:\HaxeToolkit\haxe"
+          setx PATH "%HAXEPATH%;%PATH%"
+      # Runs a set of commands using the runners shell
+      - name: Install Haxelib
+        run: |
+          haxelib setup C:/haxelib
+          haxelib install hmm
+          haxelib run hmm setup
+          hmm install
+          haxelib list
+      - name: Create Version Tag
+        run: echo "${{github.run_id}}" > VERSION
+      - name: Compile
+        run: haxelib run lime build windows --app-version="4.0.0-${{ github.run_id}}"
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windowsBuild
+          path: export/release/windows/bin
+  buildMac:
+    runs-on: macos-12
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4.1.7
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+      # Runs a set of commands using the runners shell
+      - name: Install Haxelib
+        run: |
+          haxelib setup ~/haxelib
           haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp
           haxelib install thx.core
           haxelib install thx.semver
@@ -63,76 +123,13 @@ jobs:
           haxelib git hscript https://github.com/T5mpler/hscript-dnb
           haxelib install hxvlc 2.2.5
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
-
-      # ============================================================
-      # FIX XCODE 16.4 / iOS 18.5 ZLIB BUILD ERROR
-      # fdopen macro breaks stdio.h, causing "expected identifier" error
-      # ============================================================
-      - name: Patch zlib for iOS build
-        run: |
-          echo "=== APPLYING zlib fdopen + OS_CODE FIX ==="
-
-          ZUTIL=$(haxelib path hxcpp | head -n1)/project/thirdparty/zlib-1.2.11/zutil.h
-
-          echo "Patching: $ZUTIL"
-
-          # Fix fdopen macro conflict for Apple platforms
-          sed -i.bak $'s/# *define fdopen(fd,mode) NULL/#ifndef __APPLE__\\\n#  define fdopen(fd,mode) NULL\\\n#endif/' "$ZUTIL"
-
-          # Fix OS_CODE redefinition warning
-          sed -i.bak $'s/#  define OS_CODE 19/#undef OS_CODE\\\n#  define OS_CODE 19/' "$ZUTIL"
-
-          echo "=== zlib PATCH COMPLETE ==="
-
-          # -----------------------------
-          # Fix OS_CODE redefinition warning
-          # -----------------------------
-          sed -i.bak $'s/#  define OS_CODE 19/#undef OS_CODE\\\n#  define OS_CODE 19/' "$ZUTIL"
-
-          echo "=== zlib PATCH COMPLETE ==="
-
-      - name: Generate iOS C++
-        run: |
-          haxelib run lime build ios -nosign -DofficialBuild -DMOBILE_BUILD -D HXCPP_CPP11 || true
-
-      - name: Patch thx.Nil automatically
-        run: |
-          echo "=== Running UNIVERSAL thx.Nil PATCHER ==="
-
-          ROOTS=(
-            "./export/ios/obj"
-            "./bin/ios/D-Side Redux/haxe/build"
-            "./bin/ios/D-Side Redux/haxe/build/Release-iphoneos-64"
-          )
-
-          patched=0
-
-          for root in "${ROOTS[@]}"; do
-            if [ ! -d "$root" ]; then
-              continue
-            fi
-
-            # Find all C/C++/ObjC++ files and patch Nil → ThxNil
-            while IFS= read -r -d '' file; do
-              perl -pi -e 's/\bNil\b/ThxNil/g; s/thx::Nil/thx::ThxNil/g' "$file" && patched=$((patched+1))
-            done < <(find "$root" -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.cpp" -o -name "*.mm" \) -print0)
-          done
-
-          echo "Patched ${patched} file(s)."
-          echo "=== Patch Completed ==="
-
-      - name: Build iOS (Final)
-        run: |
-          haxelib run lime build ios -nosign -DofficialBuild -DMOBILE_BUILD -D HXCPP_CPP11
-
-      - name: Package IPA
-        run: |
-          cd export/release/ios/build/*-iphoneos
-          mkdir Payload
-          mv *.app Payload/
-          zip -r ~/ios-${{ steps.ver.outputs.version }}.ipa Payload
-
-      - uses: actions/upload-artifact@v4
+          haxelib list
+      - name: Create Version Tag
+        run: echo "${{github.run_id}}" > VERSION
+      - name: Compile
+        run: haxelib run lime build mac --app-version="4.0.0-${{ github.run_id}}"
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: ios-ipa
-          path: ~/ios-*.ipa
+          name: macBuild
+          path: export/release/macos/bin
