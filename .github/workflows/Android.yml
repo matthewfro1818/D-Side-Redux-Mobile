@@ -1,81 +1,105 @@
+# A way to individually do android builds instead of triggering the main branch.
+
 name: Android Build
 
-on: workflow_dispatch
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  pull_request:
+    branches: [ main ]
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
-    name: Android Build
-    permissions: write-all
+  # This workflow contains a single job called "build"
+  buildAndroid:
+    # The type of runner that the job will run on
     runs-on: ubuntu-24.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4.1.7
 
-      - name: Setup Haxe
-        uses: krdlab/setup-haxe@master
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
         with:
-          haxe-version: 4.3.7
+          ndk-version: r21e
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@main
+        with:
+          distribution: 'temurin'
+          java-version: '17'
           
-      - name: Install Libraries
-        run: |
-         haxelib install hxpkg --global
-         haxelib run hxpkg setup --global
-         haxelib run hxpkg install
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2.0.2
 
-      - name: Restore Cache
-        uses: actions/cache@v4
+      - uses: krdlab/setup-haxe@master
         with:
-          key: cache-android-night
-          path: |
-            .haxelib/
-            export/release/android/haxe/
-            export/release/android/obj/
-          restore-keys: |
-            cache-android-night 
+          haxe-version: 4.3.4
+      # Runs a set of commands using the runners shell
+      - name: Install Haxelib
+        run: |
+          haxelib setup ~/haxelib
+          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp
+          haxelib install thx.core
+          haxelib install thx.semver
+          haxelib install lime
+          haxelib install openfl
+          haxelib install flixel 5.2.2
+          haxelib install flixel-tools 1.5.1
+          haxelib install flixel-ui 2.5.0
+          haxelib install flixel-addons 2.11.0
+          haxelib install flxanimate
+          haxelib install json2object
+          haxelib git polymod https://github.com/PabloelproxD210/Polymod.git
+          haxelib git hscript https://github.com/T5mpler/hscript-dnb
+          haxelib install hxvlc 2.2.5
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
+          haxelib install hxpkg --global
+          haxelib run hxpkg setup --global
+          haxelib run hxpkg install
+          haxelib run lime rebuild hxcpp
+          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp
+          haxelib install thx.core
+          haxelib install thx.semver
+          haxelib install lime
+          haxelib install openfl
+          haxelib install flixel 5.2.2
+          haxelib install flixel-tools 1.5.1
+          haxelib install flixel-ui 2.5.0
+          haxelib install flixel-addons 2.11.0
+          haxelib install flxanimate
+          haxelib install json2object
+          haxelib git polymod https://github.com/PabloelproxD210/Polymod.git
+          haxelib git hscript https://github.com/T5mpler/hscript-dnb
+          haxelib install hxvlc 2.2.5
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
+          haxelib git extension-androidtools https://github.com/LimeExtensions/extension-androidtools
+          haxelib list
       - name: Configure Android
         run: |
-          haxelib run lime setup android
+          haxelib run lime setup -alias -y
           haxelib run lime config ANDROID_SDK $ANDROID_HOME
-          haxelib run lime config ANDROID_NDK_ROOT $ANDROID_NDK_LATEST_HOME
-          haxelib run lime config JAVA_HOME $JAVA_HOME_11_X64
+          haxelib run lime config ANDROID_NDK_ROOT $ANDROID_NDK_HOME
+          haxelib run lime config JAVA_HOME $JAVA_HOME
           haxelib run lime config ANDROID_SETUP true
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+      - name: Run Gradle
+        working-directory: project
+        run: gradle
+      - name: Create Version Tag
+        run: echo "${{github.run_id}}" > VERSION
       - name: Compile
-        run: haxelib run lime build android -release
-
-      - name: Upload Artifact
+        run: haxelib run lime build android --app-version="4.0.0-${{ github.run_id}}"
+      - name: Publish Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DSideRedux-Android
-          path: export/release/android/bin/app/build/outputs/apk/*
-          if-no-files-found: error
-
-      - name: Clearing already existing cache
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const caches = await github.rest.actions.getActionsCacheList({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            })
-            for (const cache of caches.data.actions_caches) {
-              if (cache.key == "cache-build-night") {
-                console.log('Clearing ' + cache.key + '...')
-                await github.rest.actions.deleteActionsCacheById({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  cache_id: cache.id,
-                })
-                console.log("Cache cleared.")
-              }
-            }
-      - name: Uploading new cache
-        uses: actions/cache@v4
-        with:
-          # caching again since for some reason it doesnt work with the first post cache shit
-          key: cache-android-night
-          path: |
-            .haxelib/
-            export/release/android/haxe/
-            export/release/android/obj/
-          restore-keys: |
-            cache-android-night
+          name: androidBuild
+          path: export/release/android/bin/app/build/outputs/apk/debug
