@@ -30,8 +30,12 @@ var dance:FlxSprite;
 var logo:FlxSprite;
 var bg:FlxBackdrop;
 var bg2:FlxBackdrop;
+var titleText:FlxSprite;
+var bgColor:FlxSprite;
+var bgDoodles:FlxSprite;
+var introTxt:FlxText;
+var viz:PolygonSpectogram;
 var skippedIntro:Bool = false;
-var controls = PlayerSettings.player1.controls;
 var colorTween:FlxTween;
 
 // array of flavor text that appears during the intro sequence
@@ -217,7 +221,7 @@ var entered = false;
 function onEnter()
 {
 	ScriptedTransition.setTransition('SimpleSticker');
-	viz.color = 0xFFaa11fc;
+	if (viz != null) viz.color = 0xFFaa11fc;
 	entered = true;
 	FlxG.sound.play(Paths.sound('confirmMenu'));
 	FlxG.camera.flash(FlxColor.WHITE, 1);
@@ -343,7 +347,7 @@ function skipIntro()
 		skippedIntro = true;
 		FlxTween.cancelTweensOf(FlxG.camera);
 		FlxG.camera.zoom = 1;
-		viz.color = 0xFF1fcd4d;
+		if (viz != null) viz.color = 0xFF1fcd4d;
 		
 		FlxTween.cancelTweensOf(bgColor);
 		FlxTween.cancelTweensOf(bgDoodles);
