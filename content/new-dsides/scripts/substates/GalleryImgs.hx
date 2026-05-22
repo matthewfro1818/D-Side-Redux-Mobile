@@ -10,6 +10,7 @@ var imgs:FlxTypedGroup;
 var descs:FlxTypedGroup;
 var inputs = false;
 var overlaps = [];
+var xButton:FlxSprite;
 
 function onLoad() {
 	bgbg = new FlxSprite().makeGraphic(1280, 720, 0xFF271850);

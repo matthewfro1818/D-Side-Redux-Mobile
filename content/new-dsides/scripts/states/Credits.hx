@@ -12,6 +12,7 @@ import funkin.scripting.PluginsManager;
 import funkin.api.DiscordClient;
 
 var controls = PlayerSettings.player1.controls;
+var xButton:FlxSprite;
 
 // Typedef made to simplify and improve the readability of a user's credit data
 typedef CredData = {

@@ -14,6 +14,7 @@ import funkin.scripting.PluginsManager;
 import funkin.api.DiscordClient;
 
 var controls = PlayerSettings.player1.controls;
+var xButton:FlxSprite;
 
 var sections = [
 	'bf',

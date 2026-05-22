@@ -18,6 +18,7 @@ import funkin.states.options.OptionsState;
 import funkin.api.DiscordClient;
 
 var controls = PlayerSettings.player1.controls;
+var xButton:FlxSprite;
 
 var op = [
 	'notes',

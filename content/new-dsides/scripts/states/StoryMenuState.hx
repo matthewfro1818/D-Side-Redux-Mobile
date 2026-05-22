@@ -73,6 +73,7 @@ var difficultySelectors:FlxSpriteGroup;
 var bf:FlxSprite;
 var gf:FlxSprite;
 var oppGrp:FlxSpriteGroup;
+var xButton:FlxSprite;
 
 /**
  * [onLoad()]

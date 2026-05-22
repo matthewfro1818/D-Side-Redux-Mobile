@@ -1,6 +1,8 @@
 import flixel.text.FlxText;
 import funkin.scripting.PluginsManager;
 
+var xButton:FlxSprite;
+
 function onCreatePost() {
 	FlxG.persistentUpdate = true;
 	bg.makeGraphic(1280, 720, FlxColor.BLACK);

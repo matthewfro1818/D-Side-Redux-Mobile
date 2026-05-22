@@ -33,6 +33,7 @@ var curSelected = 0;
 var controls = PlayerSettings.player1.controls;
 var buttons:FlxTypedGroup;
 var chars:FlxTypedGroup;
+var xButton:FlxSprite;
 var buttonOffsets = [[36, 6], [36, 6], [32, 0], [36, 11], [23, 1]];
 var charOffsets = [[100, 73], [70, 40], [69, 79], [67, 55], [80, 62]];
 var clicksOnChars = 0;
