@@ -47,6 +47,9 @@
 
     <!--Fixes hxvlc using global rather than local. you will need to use hmm/hxpkg to compile this project though-->
     <setenv name="HAXEPATH" value="./"/>
+    <!-- Keep MSVC from running out of heap while hxcpp compiles generated C++. -->
+    <setenv name="HXCPP_COMPILE_THREADS" value="1" if="windows"/>
+    <set name="HXCPP_COMPILE_THREADS" value="1" if="windows"/>
 
     <set name="BUILD_DIR" value="export/debug" if="debug" />
     <set name="BUILD_DIR" value="export/release" unless="debug" />
@@ -102,7 +105,7 @@
     <haxeflag name="--macro" value="addMetadata('@:build(funkin.backend.macro.FlxMacro.buildFlxCamera())', 'flixel.FlxCamera')" />
 
     <haxeflag name="--macro" value="include('funkin')" />
-    <haxeflag name="--macro" value="include('flixel', true, ['flixel.addons.nape.*','flixel.addons.editors.*','flixel.addons.tile.FlxRayCastTilemap','flixel.system.macros'])" />
+    <haxeflag name="--macro" value="include('flixel', true, ['flixel.addons.nape.*','flixel.addons.editors.*','flixel.addons.tile.FlxRayCastTilemap','flixel.system.macros'])" unless="windows" />
 
     <haxeflag name="-dce no" />
 
