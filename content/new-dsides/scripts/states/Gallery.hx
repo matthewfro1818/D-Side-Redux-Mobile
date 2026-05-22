@@ -325,13 +325,11 @@ function changeSelection(id) {
 
 	for (i in characters.members) {
 		if (i.ID == curSelected) {
-			i.zIndex = 1;
 			// i.setColorTransform(1,1,1,1,255,255,255,0);
 			FlxTween.tween(i, {alpha: 1}, 0.125);
 			FlxTween.tween(i.scale, {x: data[i.ID].charScale}, 0.25, {ease: FlxEase.bounceOut});
 			// FlxTween.tween(255, 1, 0.5, {onUpdate: (t)->{ i.setColorTransform(1,1,1,1,t.value,t.value,t.value,0); }});
 		} else {
-			i.zIndex = 0;
 			FlxTween.tween(i, {alpha: 0}, 0.125);
 			FlxTween.tween(i.scale, {x: 0.05}, 0.25, {ease: FlxEase.backIn});
 			// FlxTween.tween(1, 255, 0.5, {onUpdate: (t)->{ i.setColorTransform(1,1,1,1,t.value,t.value,t.value,0); }});
@@ -347,8 +345,6 @@ function changeSelection(id) {
 
 	info.visible = data[curSelected].title != 'Miscellaneous';
 	smallbox.visible = data[curSelected].title != 'Miscellaneous';
-
-	refreshZ(characters);
 
 	DiscordClient.changePresence('Browsing the Gallery', '['+ data[curSelected].title + ']');
 }

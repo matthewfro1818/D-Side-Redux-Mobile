@@ -1,4 +1,3 @@
-import funkin.utils.SortUtil;
 import funkin.utils.CameraUtil;
 import flixel.util.FlxSort;
 import sys.FileSystem;
@@ -44,7 +43,7 @@ function onLoad() {
 
 			var sticky = newSticker(FlxG.save.data.packChoice, pack[choice], FlxPoint.get(xPos, yPos), FlxG.random.int(0, maxStickers, prevIDs),
 				FlxG.random.int(-60, 70));
-			prevIDs.push(sticky.zIndex);
+			prevIDs.push(sticky.ID);
 			stickerGrp.add(sticky);
 
 			if (xPos <= FlxG.width) {
@@ -61,7 +60,7 @@ function onLoad() {
 				name: StringTools.replace(pack[choice], '.png', ''),
 				position: [sticky.x, sticky.y],
 				angle: sticky.angle,
-				index: sticky.zIndex
+				index: sticky.ID
 			});
 			FlxG.save.flush();
 		}
@@ -75,7 +74,7 @@ function onLoad() {
 			var rS = new FlxSprite().loadGraphic(Paths.image('UI/stickers/secrets/' + choice));
 			rS.scale.set(0.8, 0.8);
 			rS.updateHitbox();
-			rS.zIndex = maxStickers;
+			rS.ID = maxStickers;
 			rS.camera = CameraUtil.lastCamera;
 			rS.angle = FlxG.random.float(-60, 70);
 			rS.visible = false;
@@ -85,7 +84,7 @@ function onLoad() {
 				name: choice,
 				position: [rS.x, rS.y],
 				angle: rS.angle,
-				index: rS.zIndex
+				index: rS.ID
 			};
 			// trace(data);
 			FlxG.save.data.stickerHell.push(data);
@@ -98,11 +97,11 @@ function onLoad() {
 		}
 	}
 
-	stickerGrp.sort(SortUtil.sortByZ, FlxSort.ASCENDING);
+	stickerGrp.sort(sortByID, FlxSort.ASCENDING);
 
 	if (status == 0) {
 		for (i in stickerGrp.members) {
-			new FlxTimer().start(time * i.zIndex, (t) -> {
+			new FlxTimer().start(time * i.ID, (t) -> {
 				i.visible = true;
 				i.scale.set(0.85, 0.85);
 				FlxTween.tween(i.scale, {x: 0.8, y: 0.8}, 0.125);
@@ -114,7 +113,7 @@ function onLoad() {
 	} else {
 		for (i in stickerGrp.members) {
 			i.visible = true;
-			new FlxTimer().start(time * i.zIndex, (t) -> {
+			new FlxTimer().start(time * i.ID, (t) -> {
 				i.visible = false;
 				FlxG.sound.play(Paths.sound('keys/keyClick' + FlxG.random.int(1, 9, [6])));
 			});
@@ -130,11 +129,18 @@ function newSticker(pack:Int, graphic:String, position:FlxPoint, index:Int, angl
 	sticker.scale.set(0.8, 0.8);
 	sticker.updateHitbox();
 	sticker.setPosition(position.x, position.y);
-	sticker.zIndex = index;
+	sticker.ID = index;
 	sticker.camera = CameraUtil.lastCamera;
 	sticker.antialiasing = true;
 	sticker.angle = angle;
 	sticker.visible = status != 0;
 
 	return sticker;
+}
+
+function sortByID(order:Int, a:FlxSprite, b:FlxSprite):Int {
+	if (a == null || b == null)
+		return 0;
+
+	return FlxSort.byValues(order, a.ID, b.ID);
 }

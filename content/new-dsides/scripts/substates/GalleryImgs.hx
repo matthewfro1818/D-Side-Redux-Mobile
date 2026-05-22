@@ -182,7 +182,6 @@ function changeSelection(change)
 
 	FlxTween.tween(img, {alpha: 1}, 0.125);
 
-	refreshZ(imgs);
 	descText.text = data[curSelected].desc + ' [' + (curSelected + 1) + '/' + data.length + ']';
 	descText.screenCenter(FlxAxes.X);
 }

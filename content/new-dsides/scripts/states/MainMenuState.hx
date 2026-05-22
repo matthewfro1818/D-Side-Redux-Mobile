@@ -6,10 +6,6 @@
  */
 import funkin.scripting.ScriptedState;
 import funkin.backend.PlayerSettings;
-import funkin.game.shaders.OverlayShader;
-import funkin.game.shaders.MadnessShaders.NTSCGlitch;
-import funkin.game.shaders.MadnessShaders.Abberation;
-import openfl.filters.ShaderFilter;
 import flixel.text.FlxText;
 import flixel.addons.transition.FlxTransitionableState;
 import funkin.states.transitions.ScriptedTransition;
@@ -18,12 +14,9 @@ import funkin.states.StoryMenuState;
 import funkin.states.FreeplayState;
 import funkin.states.options.OptionsState;
 import funkin.states.CreditsState;
-import funkin.game.shaders.GreenScreenShader;
 import funkin.utils.WindowUtil;
 import funkin.scripting.PluginsManager;
 import funkin.api.DiscordClient;
-import flixel.text.FlxBitmapText;
-import flixel.graphics.frames.FlxBitmapFont;
 
 
 var options = ['story mode', 'freeplay', 'options', 'gallery', 'credits'];
@@ -139,15 +132,12 @@ function onLoad() {
 	buttons.members[4].y -= 25;
 	changeSelection(0);
 
-	var font = FlxBitmapFont.fromMonospace(Paths.image("menus/main/numbers"), "0123456789%.", new FlxPoint(65, 77));
-
 	var color = v1percent >= 100 ? 0xFFd119e3 :0xFFF58FFF;
 
-	compText = new FlxBitmapText(40, 670, '', font);
+	compText = new FlxText(40, 670);
+	compText.setFormat(Paths.font('candy.otf'), 24, color, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 	compText.text = Std.string(v1percent) + '%';
-	compText.scale.set(0.3, 0.3);
 	compText.updateHitbox();
-	compText.color = color;
 	add(compText);
 
 	completion = new FlxSprite(compText.x + compText.width + 14, compText.y).loadGraphic(Paths.image('menus/main/completion'));
@@ -191,7 +181,6 @@ function onLoad() {
 	confetti.onFormat(() -> {
 		confetti.setGraphicSize(1280);
 		confetti.screenCenter();
-		confetti.shader = new GreenScreenShader();
 		confetti.alpha = 0;
 	});
 	confetti.load(Paths.video('confetti'));
@@ -204,9 +193,6 @@ function onLoad() {
 	add(confetti);
 	confetti.play();
 	confetti.pause();
-
-	glitch = new NTSCGlitch(0);
-	abb = new Abberation(0);
 
 	var tempTrophies = [];
 	if (FlxG.save.data.charClicks == null) {
@@ -373,9 +359,6 @@ function onUpdate(elapsed) {
 
 		clickTimer = 0;
 	}
-
-	if (glitch != null)
-		glitch.update(elapsed);
 
 	for (i in [cd1, cd2])
 		i.angle += (5 * whatever) * (60 * elapsed);
@@ -668,8 +651,6 @@ function giveTrophy(trophyColor, skipAnim) {
 		if (trophyColor == "god") {
 			time = 15;
 
-			FlxG.camera.filters = [new ShaderFilter(glitch), new ShaderFilter(abb)];
-
 			FlxTimer.wait(7, FlxG.sound.play(Paths.sound("god")));
 
 			FlxTween.tween(FlxG.sound.music, {pitch: 0.2, volume: 0.1}, 5, {startDelay: 1});
@@ -683,20 +664,6 @@ function giveTrophy(trophyColor, skipAnim) {
 				}
 			});
 
-			FlxTween.num(0, 15, 10, {
-				startDelay: 5,
-				ease: FlxEase.quadIn,
-				onUpdate: (t) -> {
-					glitch.setGlitch(t.value);
-				}
-			});
-
-			FlxTween.num(0, 2, 8, {
-				startDelay: 10,
-				onUpdate: (t) -> {
-					abb.setChrom(t.value);
-				}
-			});
 		}
 
 		FlxTimer.wait(time, () -> {
@@ -705,10 +672,7 @@ function giveTrophy(trophyColor, skipAnim) {
 			FlxG.sound.music.pitch = 1;
 			FlxG.sound.music.volume = 1;
 			FlxG.camera.zoom = 1;
-			FlxG.camera.filters = [];
 
-			glitch.setGlitch(0);
-			abb.setChrom(0);
 			WindowUtil.centerWindowOnPoint(FlxPoint.get(WindowUtil.monitorResolutionWidth / 2, WindowUtil.monitorResolutionHeight / 2));
 
 			FlxTween.tween(black, {alpha: 0}, 1);
@@ -784,16 +748,13 @@ function changeSelection(change) {
 		if (button.ID == curSelected) {
 			button.animation.play('selected');
 			button.offset.set(buttonOffsets[curSelected][0], buttonOffsets[curSelected][1]);
-			button.zIndex = 999;
 		} else {
-			button.zIndex = button.ID;
 			button.animation.play('idle');
 			button.offset.set(0, 0);
 		}
 	}
 	for (c in chars)
 		c.visible = c.ID == curSelected;
-	refreshZ(buttons);
 }
 
 /**
