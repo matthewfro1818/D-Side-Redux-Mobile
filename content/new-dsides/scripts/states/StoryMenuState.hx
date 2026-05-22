@@ -8,6 +8,7 @@ import funkin.data.Highscore;
 import funkin.backend.Difficulty;
 import funkin.backend.PlayerSettings;
 import funkin.states.MainMenuState;
+import funkin.states.substates.GameplayChangersSubstate;
 import funkin.states.transitions.ScriptedTransition;
 import funkin.objects.Bopper;
 import funkin.data.Chart;
@@ -266,6 +267,12 @@ function onUpdate(elapsed) {
 			FlxG.sound.play(Paths.sound("cancelMenu"));
 
 			FlxG.switchState(() -> new MainMenuState());
+		}
+
+		if (FlxG.keys.justPressed.CONTROL)
+		{
+			persistentUpdate = false;
+			openSubState(new GameplayChangersSubstate());
 		}
 
 		if (FlxG.mouse.overlaps(xButton))
