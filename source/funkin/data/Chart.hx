@@ -10,6 +10,7 @@ import haxe.Json;
 // this is for later
 enum abstract ChartFormat(String) to String
 {
+	var NMV2 = 'NightmareVision 2';
 	var PSYCH = 'Psych_1.0';
 	var CNE = 'Codename Engine';
 	var VSLICE = 'V-Slice';
@@ -64,11 +65,11 @@ class Chart
 		}
 		
 		final format = checkFormat(data);
-		if (format != UNKNOWN) throw 'this is using a incompatible format\n($format)'; // this isnt gonna stay btw
+		if (format != UNKNOWN && format != NMV2) throw 'this is using a incompatible format\n($format)'; // this isnt gonna stay btw
 		
-		if (!Reflect.hasField(data, 'song')) throw "data provided is invalid";
+		if (!Reflect.hasField(data, 'song') && !isDirectSongObject(data)) throw "data provided is invalid";
 		
-		var json = data.song;
+		var json = isDirectSongObject(data) ? data : data.song;
 		correctFormat(json);
 		
 		return cast json;
@@ -83,8 +84,20 @@ class Chart
 		
 		if (Reflect.hasField(json, 'format'))
 		{
-			var format:String = Reflect.field(json, 'format');
+			var format:String = normalizeFormatName(Reflect.field(json, 'format'));
+			if (format == 'nmv2') return NMV2;
 			if (format.contains('psych_v1')) return PSYCH;
+		}
+
+		if (Reflect.hasField(json, 'song'))
+		{
+			final songData:Dynamic = Reflect.field(json, 'song');
+			if (songData != null && Reflect.hasField(songData, 'format'))
+			{
+				var format:String = normalizeFormatName(Reflect.field(songData, 'format'));
+				if (format == 'nmv2') return NMV2;
+				if (format.contains('psych_v1')) return PSYCH;
+			}
 		}
 		
 		if (Reflect.hasField(json, 'version') && Reflect.hasField(json, 'scrollSpeed')) return VSLICE;
@@ -92,6 +105,21 @@ class Chart
 		if (Reflect.hasField(json, 'codenameChart')) return CNE;
 		
 		return UNKNOWN;
+	}
+
+	static inline function normalizeFormatName(format:Dynamic):String
+	{
+		if (format == null) return '';
+		return Std.string(format).toLowerCase();
+	}
+
+	static function isDirectSongObject(data:Dynamic):Bool
+	{
+		if (data == null || !Reflect.hasField(data, 'notes')) return false;
+		if (!Reflect.hasField(data, 'song')) return true;
+
+		final songField:Dynamic = Reflect.field(data, 'song');
+		return !Reflect.hasField(songField, 'notes');
 	}
 	
 	static function correctFormat(songJson:Dynamic) // cleanup chart format
@@ -161,6 +189,8 @@ class Chart
 			return;
 		}
 
+		final isNMV2:Bool = normalizeFormatName(songJson.format) == 'nmv2';
+
 		if (songJson.format != 'psych_v1' && songJson.format != 'nmv2')
 		{
 			songJson.format = 'nmv2';
@@ -176,6 +206,22 @@ class Chart
 		
 		for (section in sectionsData)
 		{
+			if (section.sectionNotes == null) section.sectionNotes = [];
+			if (!Reflect.hasField(section, 'gfSection')) section.gfSection = false;
+			if (!Reflect.hasField(section, 'bpm') || Math.isNaN(section.bpm)) section.bpm = songJson.bpm;
+			if (!Reflect.hasField(section, 'changeBPM')) section.changeBPM = false;
+			if (!Reflect.hasField(section, 'altAnim')) section.altAnim = false;
+			if (!Reflect.hasField(section, 'mustHitSection')) section.mustHitSection = true;
+
+			if (isNMV2)
+			{
+				for (note in section.sectionNotes)
+				{
+					if (note != null && note.length >= 3 && note[1] >= 0 && note.length < 5)
+						note[4] = true;
+				}
+			}
+
 			final beats:Null<Float> = section.sectionBeats;
 			if (beats == null || Math.isNaN(beats))
 			{
