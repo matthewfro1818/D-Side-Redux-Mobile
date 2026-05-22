@@ -8,7 +8,6 @@ import lime.ui.FileDialogType;
 import openfl.events.Event;
 import openfl.net.FileFilter;
 import openfl.net.FileReference;
-import openfl.utils.ByteArray;
 
 #if android
 import haxe.io.Bytes;
@@ -211,17 +210,7 @@ class FileReferenceEx extends FileReference
 
 		try
 		{
-			var content:String = "";
-			if (Std.isOfType(data, ByteArray))
-			{
-				final bytes:ByteArray = cast data;
-				bytes.position = 0;
-				content = bytes.readUTFBytes(bytes.length);
-			}
-			else
-			{
-				content = Std.string(data);
-			}
+			final content:String = Std.string(data);
 
 			final jniCall = JNI.createStaticMethod("mobile/backend/java/FileUtils", "saveFile", "(Ljava/lang/String;Ljava/lang/String;)V");
 			jniCall(defaultFileName != null ? defaultFileName : "file.json", content);
