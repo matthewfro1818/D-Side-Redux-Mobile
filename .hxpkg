@@ -51,8 +51,7 @@
             },
             {
                 "name": "lime",
-                "link": "https://github.com/FunkinCrew/lime",
-                "branch": "ab8a273e3822e859c370d5b2054aa01b25b51a9a"
+                "version": "8.0.2"
             },
             {
                 "name": "openfl",
