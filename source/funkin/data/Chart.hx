@@ -50,7 +50,7 @@ class Chart
 		var path = Paths.json('$songName/charts/${Difficulty.getDifficultyFilePath(difficulty)}');
 		
 		if (!FunkinAssets.exists(path)) path = Paths.json('$songName/data/${Difficulty.getDifficultyFilePath(difficulty)}');
-		
+
 		if (!FunkinAssets.exists(path)) throw 'couldnt find chart at ($path)';
 		
 		return fromData(FunkinAssets.parseJson(FunkinAssets.getContent(path)));
@@ -160,11 +160,11 @@ class Chart
 			songJson.notes = [];
 			return;
 		}
-		
+
 		if (songJson.format != 'psych_v1' && songJson.format != 'nmv2')
 		{
 			songJson.format = 'nmv2';
-			
+
 			for (section in sectionsData)
 			{
 				for (note in section.sectionNotes)
