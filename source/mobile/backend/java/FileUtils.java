@@ -199,7 +199,7 @@ public class FileUtils extends Extension {
                 fileName = "temp_" + System.currentTimeMillis() + ".json";
             }
 
-            java.io.File rootDir = new java.io.File(android.os.Environment.getExternalStorageDirectory(), ".NightmareVision");
+            java.io.File rootDir = new java.io.File(android.os.Environment.getExternalStorageDirectory(), ".D-Side Redux");
             java.io.File tempDir = new java.io.File(rootDir, ".temp");
             if (!tempDir.exists()) tempDir.mkdirs();
 
