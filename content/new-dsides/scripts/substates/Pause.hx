@@ -24,6 +24,7 @@ var allowControls = false;
 var curSelected = 0;
 var buttons:FlxTypedGroup;
 var options = ['resume', 'restart', 'practice', 'options', 'exit'];
+var pauseMusic:FlxSound;
 
 function onCreate() {
 	var json = PluginsManager.callPluginFunc('Utils', 'loadJson', ['metadata', PlayState.SONG.song.toLowerCase()]);
@@ -188,7 +189,7 @@ function onCreate() {
 
 function onUpdate(elapsed) {
 
-	if (pauseMusic.volume < 0.5)
+	if (pauseMusic != null && pauseMusic.volume < 0.5)
 		pauseMusic.volume += 0.05 * elapsed;
 
 	if (bg != null) {
@@ -229,7 +230,7 @@ function changeSelection(change) {
 function choose() {
 	if (options[curSelected] != 'practice') {
 		allowControls = false;
-		pauseMusic.pause();
+		if (pauseMusic != null) pauseMusic.pause();
 	}
 	switch (options[curSelected]) {
 		// default: end();
@@ -316,7 +317,10 @@ function loadJson() {
 }
 
 function onDestroy() {
-	FlxTween.cancelTweensOf(pauseMusic);
-	pauseMusic.volume = 0;
-	pauseMusic.destroy();
+	if (pauseMusic != null) {
+		FlxTween.cancelTweensOf(pauseMusic);
+		pauseMusic.volume = 0;
+		pauseMusic.destroy();
+		pauseMusic = null;
+	}
 }

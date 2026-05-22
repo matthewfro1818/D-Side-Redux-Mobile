@@ -3,6 +3,16 @@ import funkin.objects.Bopper;
 
 var str = 'backgrounds/spag/';
 var cutscene = PlayState.isStoryMode;
+var flash:FlxSprite;
+var truckLights:FlxSprite;
+var family:Character;
+var mario:FlxSprite;
+var black:FlxSprite;
+var peppino:Character;
+var dust:FlxSprite;
+var banner:FlxSprite;
+var upnext:FlxSprite;
+var skipTxt:FlxText;
 
 function onLoad() {
 	var bg = new FlxSprite(-900, -300).loadGraphic(Paths.image(str + 'bg'));
@@ -25,56 +35,44 @@ function onLoad() {
 	mario.animation.play('idle');
 	mario.scrollFactor.set(1, 1);
 	mario.setGraphicSize(Std.int(mario.width * 1.14));
-	mario.zIndex = 0;
 	add(mario);
 
 	black = new FlxSprite().makeGraphic(3000, 3000, FlxColor.BLACK);
 	black.scrollFactor.set();
 	black.screenCenter();
 	black.alpha = 0.4;
-	black.zIndex = 3;
 	add(black);
 
 	flash = new FlxSprite(-1150, -400).loadGraphic(Paths.image(str + 'truckGlow'));
 	// flash.blend = BlendMode.MULTIPLY;
 	flash.blend = BlendMode.SCREEN;
 	flash.alpha = 0;
-	flash.zIndex = 1;
 	add(flash);
 
 	var truck = new FlxSprite(-490, 90).loadGraphic(Paths.image(str + 'truck'));
 	truck.setScale(0.85, 0.85);
-	truck.zIndex = 2;
 	add(truck);
 
 	var light = new FlxSprite().loadGraphic(Paths.image(str + 'spaget_light'));
 	light.scrollFactor.set(0.8, 1);
 	light.setScale(0.85, 0.85);
-	light.zIndex = 3;
 	add(light);
 
 	peppino = new Character(-975, 730, 'spaghetti-people');
 	peppino.setScale(1.25, 1.25);
 	peppino.playAnim('walk-right', true);
-	peppino.zIndex = 3;
 	add(peppino);
 
 	dust = new FlxSprite(-550).loadGraphic(Paths.image(str + "DUSTFINAL"));
 	dust.velocity.x = 50;
 	dust.alpha = 0.95;
-	dust.zIndex = 999;
 	add(dust);
 
 	truckLights = new FlxSprite().loadGraphic(Paths.image(str + 'lights'));
 	truckLights.setPosition(truck.x + 150, truck.y + 565);
 	truckLights.setScale(.85, .85);
-	truckLights.zIndex = black.zIndex + 1;
 	truckLights.blend = BlendMode.ADD;
 	add(truckLights);
-
-	dadGroup.zIndex = 4;
-	gfGroup.zIndex = 5;
-	boyfriendGroup.zIndex = 6;
 
 	Paths.sound('spaghetti/end1');
 	Paths.sound('spaghetti/end2');
@@ -282,10 +280,6 @@ function onEvent(name, v1, v2) {
 					isCameraOnForcedPos = isRapping;
 					boyfriendCameraOffset = isRapping ? [150, 0] : [0, -115];
 
-					black.zIndex = isRapping ? 5 : 0;
-					truckLights.zIndex = black.zIndex + 2;
-					refreshZ();
-
 					if (isRapping) {
 						final pos = getCharacterCameraPos(boyfriend);
 
@@ -372,7 +366,7 @@ var dir = 1;
 var add = 0;
 
 function onBeatHit() {
-	if (isFlashing) {
+	if (isFlashing && flash != null) {
 		colorInd += 1;
 		if (colorInd > 3)
 			colorInd = 0;
@@ -385,8 +379,10 @@ function onBeatHit() {
 var t = 0;
 
 function onUpdate(elapsed) {
-	flash.alpha = FlxMath.lerp(flash.alpha, 0, FlxMath.bound(0, 1, elapsed * 2));
-	truckLights.alpha = FlxMath.lerp(flash.alpha, 0, FlxMath.bound(0, 1, elapsed * 5));
+	if (flash != null)
+		flash.alpha = FlxMath.lerp(flash.alpha, 0, FlxMath.bound(0, 1, elapsed * 2));
+	if (truckLights != null && flash != null)
+		truckLights.alpha = FlxMath.lerp(truckLights.alpha, flash.alpha, FlxMath.bound(0, 1, elapsed * 5));
 
 	if (cutscene && skipTxt != null) {
 		if (FlxG.keys.justPressed.SPACE) {

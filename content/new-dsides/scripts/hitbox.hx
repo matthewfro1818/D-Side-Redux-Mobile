@@ -40,9 +40,10 @@ function onCreatePost() {
 function onUpdate() {
 	if (Mods.currentModDirectory != 'new-dsides' || isException() || callbacksLoaded) return;
 
-	if (hitbox != null) {
-		var buttons = [hitbox.buttonLeft, hitbox.buttonDown, hitbox.buttonUp, hitbox.buttonRight];
-		var hitTweens = [hitbox.buttonLeftTween, hitbox.buttonDownTween, hitbox.buttonUpTween, hitbox.buttonRightTween];
+	var gameHitbox = PlayState.instance != null ? PlayState.instance.hitbox : null;
+	if (gameHitbox != null) {
+		var buttons = [gameHitbox.buttonLeft, gameHitbox.buttonDown, gameHitbox.buttonUp, gameHitbox.buttonRight];
+		var hitTweens = [gameHitbox.buttonLeftTween, gameHitbox.buttonDownTween, gameHitbox.buttonUpTween, gameHitbox.buttonRightTween];
 
 		for (i in 0...buttons.length) {
 			var oldHitboxButtons = buttons[i];
