@@ -5,8 +5,18 @@ import haxe.Timer;
 
 import lime.ui.FileDialogType;
 
+import openfl.events.Event;
 import openfl.net.FileFilter;
 import openfl.net.FileReference;
+import openfl.utils.ByteArray;
+
+#if android
+import haxe.io.Bytes;
+import lime.system.JNI;
+import mobile.backend.StorageSystem;
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 typedef BrowseOptions =
 {
@@ -158,8 +168,115 @@ class FileReferenceEx extends FileReference
 		}
 		__inputControl.click();
 		return true;
+		#elseif android
+		try
+		{
+			final mimeType = getAndroidMimeType(browseOptions.typeFilter);
+			final callback =
+				{
+					onFileSelected: (bytes:Dynamic, fileNameOrList:Dynamic) -> {
+						if (browseOptions.openStyle == OPEN_MULTIPLE)
+						{
+							final paths:Array<String> = normalizeAndroidPathList(fileNameOrList);
+							openFileDialog_onSelectMultiple(paths);
+						}
+						else
+						{
+							final fileName = Std.string(fileNameOrList);
+							final path = saveAndroidSelection(bytes, fileName);
+							if (path != null) openFileDialog_onSelect(path);
+						}
+					},
+					onCancel: () -> openFileDialog_onCancel()
+				};
+
+			final methodName = browseOptions.openStyle == OPEN_MULTIPLE ? "browseForMultipleFiles" : "browseFiles";
+			final jniCall = JNI.createStaticMethod("mobile/backend/java/FileUtils", methodName, "(Ljava/lang/String;Lorg/haxe/lime/HaxeObject;)V");
+			jniCall(mimeType, callback);
+			return true;
+		}
+		catch (e:Dynamic)
+		{
+			trace("Error opening Android file picker: " + e);
+		}
 		#end
 		
 		return false;
 	}
+
+	override public function save(data:Dynamic, defaultFileName:String = null):Void
+	{
+		#if android
+		if (data == null) return;
+
+		try
+		{
+			var content:String = "";
+			if (Std.isOfType(data, ByteArray))
+			{
+				final bytes:ByteArray = cast data;
+				bytes.position = 0;
+				content = bytes.readUTFBytes(bytes.length);
+			}
+			else
+			{
+				content = Std.string(data);
+			}
+
+			final jniCall = JNI.createStaticMethod("mobile/backend/java/FileUtils", "saveFile", "(Ljava/lang/String;Ljava/lang/String;)V");
+			jniCall(defaultFileName != null ? defaultFileName : "file.json", content);
+
+			dispatchEvent(new Event(Event.SELECT));
+			Timer.delay(() -> dispatchEvent(new Event(Event.COMPLETE)), 500);
+		}
+		catch (e:Dynamic)
+		{
+			trace("FileReferenceEx.save Android error: " + e);
+			dispatchEvent(new Event(Event.CANCEL));
+		}
+		#else
+		super.save(data, defaultFileName);
+		#end
+	}
+
+	#if android
+	static function getAndroidMimeType(typeFilter:Null<Array<FileFilter>>):String
+	{
+		if (typeFilter != null && typeFilter.length > 0)
+		{
+			final ext = typeFilter[0].extension.replace("*.", "").replace(".", "").toLowerCase();
+			return switch (ext)
+			{
+				case "json": "application/json";
+				case "txt": "text/plain";
+				case "png": "image/png";
+				case "jpg" | "jpeg": "image/jpeg";
+				default: "*/*";
+			}
+		}
+
+		return "*/*";
+	}
+
+	static function normalizeAndroidPathList(value:Dynamic):Array<String>
+	{
+		if (value == null) return [];
+		if (Std.isOfType(value, Array)) return [for (path in (cast value : Array<Dynamic>)) Path.normalize(Std.string(path))];
+		return [Path.normalize(Std.string(value))];
+	}
+
+	static function saveAndroidSelection(bytesData:Dynamic, fileName:String):Null<String>
+	{
+		if (bytesData == null) return null;
+		if (fileName == null || fileName.length == 0) fileName = "selected-file";
+
+		final tempDir = Path.addTrailingSlash(StorageSystem.getDirectory()) + ".temp";
+		if (!FileSystem.exists(tempDir)) FileSystem.createDirectory(tempDir);
+
+		final safeName = fileName.replace("/", "_").replace("\\", "_");
+		final path = Path.join([tempDir, safeName]);
+		File.saveBytes(path, Bytes.ofData(bytesData));
+		return Path.normalize(path);
+	}
+	#end
 }
