@@ -2,7 +2,14 @@
 
 name: Android Build
 
-on: workflow_dispatch
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+    workflow_dispatch:
 
 jobs:
   # This workflow contains a single job called "build"
