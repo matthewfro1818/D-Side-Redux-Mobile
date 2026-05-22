@@ -1,57 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <TextureAtlas imagePath="pause buttons.png">
-	<!-- Created using the Spritesheet and XML generator -->
-	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
-	<SubTexture name="exit idle0000" x="649" y="701" width="211" height="74" frameX="-1" frameY="-2" frameWidth="215" frameHeight="80"/>
-	<SubTexture name="exit idle0001" x="649" y="701" width="211" height="74" frameX="-1" frameY="-2" frameWidth="215" frameHeight="80"/>
-	<SubTexture name="exit idle0002" x="649" y="701" width="211" height="74" frameX="-1" frameY="-2" frameWidth="215" frameHeight="80"/>
-	<SubTexture name="exit idle0003" x="648" y="617" width="211" height="74" frameX="-1" frameY="-2" frameWidth="215" frameHeight="80"/>
-	<SubTexture name="exit idle0004" x="648" y="617" width="211" height="74" frameX="-1" frameY="-2" frameWidth="215" frameHeight="80"/>
-	<SubTexture name="exit idle0005" x="648" y="617" width="211" height="74" frameX="-1" frameY="-2" frameWidth="215" frameHeight="80"/>
-	<SubTexture name="exit selected0000" x="0" y="785" width="211" height="74" frameX="-2" frameY="-2" frameWidth="217" frameHeight="81"/>
-	<SubTexture name="exit selected0001" x="0" y="785" width="211" height="74" frameX="-2" frameY="-2" frameWidth="217" frameHeight="81"/>
-	<SubTexture name="exit selected0002" x="648" y="428" width="212" height="74" frameX="-1" frameY="-2" frameWidth="217" frameHeight="81"/>
-	<SubTexture name="exit selected0003" x="648" y="428" width="212" height="74" frameX="-1" frameY="-2" frameWidth="217" frameHeight="81"/>
-	<SubTexture name="options idle0000" x="0" y="617" width="324" height="84" frameX="-1" frameY="0" frameWidth="330" frameHeight="89"/>
-	<SubTexture name="options idle0001" x="0" y="617" width="324" height="84" frameX="-1" frameY="0" frameWidth="330" frameHeight="89"/>
-	<SubTexture name="options idle0002" x="0" y="617" width="324" height="84" frameX="-1" frameY="0" frameWidth="330" frameHeight="89"/>
-	<SubTexture name="options idle0003" x="324" y="617" width="324" height="84" frameX="-1" frameY="0" frameWidth="330" frameHeight="89"/>
-	<SubTexture name="options idle0004" x="324" y="617" width="324" height="84" frameX="-1" frameY="0" frameWidth="330" frameHeight="89"/>
-	<SubTexture name="options idle0005" x="324" y="617" width="324" height="84" frameX="-1" frameY="0" frameWidth="330" frameHeight="89"/>
-	<SubTexture name="options selected0000" x="0" y="701" width="324" height="84" frameX="-2" frameY="0" frameWidth="331" frameHeight="89"/>
-	<SubTexture name="options selected0001" x="0" y="701" width="324" height="84" frameX="-2" frameY="0" frameWidth="331" frameHeight="89"/>
-	<SubTexture name="options selected0002" x="324" y="701" width="325" height="82" frameX="-1" frameY="0" frameWidth="331" frameHeight="89"/>
-	<SubTexture name="options selected0003" x="324" y="701" width="325" height="82" frameX="-1" frameY="0" frameWidth="331" frameHeight="89"/>
-	<SubTexture name="practice idle0000" x="487" y="86" width="478" height="86" frameX="-2" frameY="1" frameWidth="484" frameHeight="89"/>
-	<SubTexture name="practice idle0001" x="487" y="86" width="478" height="86" frameX="-2" frameY="1" frameWidth="484" frameHeight="89"/>
-	<SubTexture name="practice idle0002" x="487" y="86" width="478" height="86" frameX="-2" frameY="1" frameWidth="484" frameHeight="89"/>
-	<SubTexture name="practice idle0003" x="487" y="0" width="478" height="86" frameX="-2" frameY="1" frameWidth="484" frameHeight="89"/>
-	<SubTexture name="practice idle0004" x="487" y="0" width="478" height="86" frameX="-2" frameY="1" frameWidth="484" frameHeight="89"/>
-	<SubTexture name="practice idle0005" x="487" y="0" width="478" height="86" frameX="-2" frameY="1" frameWidth="484" frameHeight="89"/>
-	<SubTexture name="practice selected0000" x="487" y="172" width="478" height="86" frameX="-4" frameY="1" frameWidth="486" frameHeight="90"/>
-	<SubTexture name="practice selected0001" x="487" y="172" width="478" height="86" frameX="-4" frameY="1" frameWidth="486" frameHeight="90"/>
-	<SubTexture name="practice selected0002" x="0" y="86" width="480" height="87" frameX="-2" frameY="1" frameWidth="486" frameHeight="90"/>
-	<SubTexture name="practice selected0003" x="0" y="86" width="480" height="87" frameX="-2" frameY="1" frameWidth="486" frameHeight="90"/>
-	<SubTexture name="restart idle0000" x="0" y="343" width="485" height="85" frameX="0" frameY="1" frameWidth="491" frameHeight="88"/>
-	<SubTexture name="restart idle0001" x="0" y="343" width="485" height="85" frameX="0" frameY="1" frameWidth="491" frameHeight="88"/>
-	<SubTexture name="restart idle0002" x="0" y="343" width="485" height="85" frameX="0" frameY="1" frameWidth="491" frameHeight="88"/>
-	<SubTexture name="restart idle0003" x="0" y="258" width="485" height="85" frameX="0" frameY="1" frameWidth="491" frameHeight="88"/>
-	<SubTexture name="restart idle0004" x="0" y="258" width="485" height="85" frameX="0" frameY="1" frameWidth="491" frameHeight="88"/>
-	<SubTexture name="restart idle0005" x="0" y="258" width="485" height="85" frameX="0" frameY="1" frameWidth="491" frameHeight="88"/>
-	<SubTexture name="restart selected0000" x="0" y="0" width="487" height="86" frameX="-1" frameY="1" frameWidth="493" frameHeight="89"/>
-	<SubTexture name="restart selected0001" x="0" y="0" width="487" height="86" frameX="-1" frameY="1" frameWidth="493" frameHeight="89"/>
-	<SubTexture name="restart selected0002" x="0" y="173" width="487" height="85" frameX="-1" frameY="1" frameWidth="493" frameHeight="89"/>
-	<SubTexture name="restart selected0003" x="0" y="173" width="487" height="85" frameX="-1" frameY="1" frameWidth="493" frameHeight="89"/>
-	<SubTexture name="resume idle0000" x="0" y="525" width="320" height="92" frameX="-1" frameY="1" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="resume idle0001" x="0" y="525" width="320" height="92" frameX="-1" frameY="1" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="resume idle0002" x="0" y="525" width="320" height="92" frameX="-1" frameY="1" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="resume idle0003" x="320" y="525" width="320" height="92" frameX="-1" frameY="1" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="resume idle0004" x="320" y="525" width="320" height="92" frameX="-1" frameY="1" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="resume idle0005" x="320" y="525" width="320" height="92" frameX="-1" frameY="1" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="resume selected0000" x="328" y="428" width="320" height="92" frameX="-1" frameY="1" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="resume selected0001" x="328" y="428" width="320" height="92" frameX="-1" frameY="1" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="resume selected0002" x="640" y="525" width="321" height="91" frameX="-1" frameY="1" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="resume selected0003" x="640" y="525" width="321" height="91" frameX="-1" frameY="1" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="botplay idle0000" x="0" y="428" width="328" height="97" frameX="-1" frameY="0" frameWidth="326" frameHeight="95"/>
-	<SubTexture name="botplay selected0000" x="487" y="258" width="328" height="97" frameX="-1" frameY="0" frameWidth="326" frameHeight="95"/>
+	<!-- Created with Adobe Animate version 23.0.0.407 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="exit idle0000" x="0" y="0" width="215" height="80"/>
+	<SubTexture name="exit idle0001" x="0" y="0" width="215" height="80"/>
+	<SubTexture name="exit idle0002" x="0" y="0" width="215" height="80"/>
+	<SubTexture name="exit idle0003" x="215" y="0" width="215" height="80"/>
+	<SubTexture name="exit idle0004" x="215" y="0" width="215" height="80"/>
+	<SubTexture name="exit idle0005" x="215" y="0" width="215" height="80"/>
+	<SubTexture name="exit selected0000" x="430" y="0" width="215" height="80" frameX="-1" frameY="0" frameWidth="217" frameHeight="81"/>
+	<SubTexture name="exit selected0001" x="430" y="0" width="215" height="80" frameX="-1" frameY="0" frameWidth="217" frameHeight="81"/>
+	<SubTexture name="exit selected0002" x="645" y="0" width="217" height="80" frameX="0" frameY="-1" frameWidth="217" frameHeight="81"/>
+	<SubTexture name="exit selected0003" x="645" y="0" width="217" height="80" frameX="0" frameY="-1" frameWidth="217" frameHeight="81"/>
+	<SubTexture name="options idle0000" x="0" y="80" width="330" height="89"/>
+	<SubTexture name="options idle0001" x="0" y="80" width="330" height="89"/>
+	<SubTexture name="options idle0002" x="0" y="80" width="330" height="89"/>
+	<SubTexture name="options idle0003" x="330" y="80" width="330" height="89"/>
+	<SubTexture name="options idle0004" x="330" y="80" width="330" height="89"/>
+	<SubTexture name="options idle0005" x="330" y="80" width="330" height="89"/>
+	<SubTexture name="options selected0000" x="660" y="80" width="330" height="89" frameX="-1" frameY="0" frameWidth="331" frameHeight="89"/>
+	<SubTexture name="options selected0001" x="660" y="80" width="330" height="89" frameX="-1" frameY="0" frameWidth="331" frameHeight="89"/>
+	<SubTexture name="options selected0002" x="0" y="169" width="330" height="87" frameX="0" frameY="-1" frameWidth="331" frameHeight="89"/>
+	<SubTexture name="options selected0003" x="0" y="169" width="330" height="87" frameX="0" frameY="-1" frameWidth="331" frameHeight="89"/>
+	<SubTexture name="practice idle0000" x="330" y="169" width="484" height="89"/>
+	<SubTexture name="practice idle0001" x="330" y="169" width="484" height="89"/>
+	<SubTexture name="practice idle0002" x="330" y="169" width="484" height="89"/>
+	<SubTexture name="practice idle0003" x="0" y="258" width="484" height="88" frameX="0" frameY="-1" frameWidth="484" frameHeight="89"/>
+	<SubTexture name="practice idle0004" x="0" y="258" width="484" height="88" frameX="0" frameY="-1" frameWidth="484" frameHeight="89"/>
+	<SubTexture name="practice idle0005" x="0" y="258" width="484" height="88" frameX="0" frameY="-1" frameWidth="484" frameHeight="89"/>
+	<SubTexture name="practice selected0000" x="484" y="258" width="484" height="89" frameX="-2" frameY="0" frameWidth="486" frameHeight="90"/>
+	<SubTexture name="practice selected0001" x="484" y="258" width="484" height="89" frameX="-2" frameY="0" frameWidth="486" frameHeight="90"/>
+	<SubTexture name="practice selected0002" x="0" y="347" width="486" height="89" frameX="0" frameY="-1" frameWidth="486" frameHeight="90"/>
+	<SubTexture name="practice selected0003" x="0" y="347" width="486" height="89" frameX="0" frameY="-1" frameWidth="486" frameHeight="90"/>
+	<SubTexture name="restart idle0000" x="486" y="347" width="491" height="88"/>
+	<SubTexture name="restart idle0001" x="486" y="347" width="491" height="88"/>
+	<SubTexture name="restart idle0002" x="486" y="347" width="491" height="88"/>
+	<SubTexture name="restart idle0003" x="0" y="436" width="491" height="88"/>
+	<SubTexture name="restart idle0004" x="0" y="436" width="491" height="88"/>
+	<SubTexture name="restart idle0005" x="0" y="436" width="491" height="88"/>
+	<SubTexture name="restart selected0000" x="491" y="436" width="492" height="89" frameX="0" frameY="0" frameWidth="493" frameHeight="89"/>
+	<SubTexture name="restart selected0001" x="491" y="436" width="492" height="89" frameX="0" frameY="0" frameWidth="493" frameHeight="89"/>
+	<SubTexture name="restart selected0002" x="0" y="525" width="493" height="88" frameX="0" frameY="0" frameWidth="493" frameHeight="89"/>
+	<SubTexture name="restart selected0003" x="0" y="525" width="493" height="88" frameX="0" frameY="0" frameWidth="493" frameHeight="89"/>
+	<SubTexture name="resume idle0000" x="493" y="525" width="326" height="95"/>
+	<SubTexture name="resume idle0001" x="493" y="525" width="326" height="95"/>
+	<SubTexture name="resume idle0002" x="493" y="525" width="326" height="95"/>
+	<SubTexture name="resume idle0003" x="0" y="620" width="326" height="94" frameX="0" frameY="-1" frameWidth="326" frameHeight="95"/>
+	<SubTexture name="resume idle0004" x="0" y="620" width="326" height="94" frameX="0" frameY="-1" frameWidth="326" frameHeight="95"/>
+	<SubTexture name="resume idle0005" x="0" y="620" width="326" height="94" frameX="0" frameY="-1" frameWidth="326" frameHeight="95"/>
+	<SubTexture name="resume selected0000" x="326" y="620" width="326" height="95"/>
+	<SubTexture name="resume selected0001" x="326" y="620" width="326" height="95"/>
+	<SubTexture name="resume selected0002" x="652" y="620" width="326" height="94" frameX="0" frameY="-1" frameWidth="326" frameHeight="95"/>
+	<SubTexture name="resume selected0003" x="652" y="620" width="326" height="94" frameX="0" frameY="-1" frameWidth="326" frameHeight="95"/>
 </TextureAtlas>
