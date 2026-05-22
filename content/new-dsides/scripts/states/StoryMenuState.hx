@@ -268,6 +268,12 @@ function onUpdate(elapsed) {
 			FlxG.switchState(() -> new MainMenuState());
 		}
 
+		if (FlxG.keys.justPressed.CONTROL)
+		{
+			persistentUpdate = false;
+            openSubState(new GameplayChangersSubstate());
+		}
+
 		if (FlxG.mouse.overlaps(xButton))
 			xButton.loadGraphic(Paths.image("UI/window/x2"));
 		else
