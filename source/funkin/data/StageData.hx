@@ -239,9 +239,9 @@ class StageData
 		if (data.girlfriend == null) data.girlfriend = template.girlfriend.copy();
 		if (data.opponent == null) data.opponent = template.opponent.copy();
 		if (data.hide_girlfriend == null) data.hide_girlfriend = template.hide_girlfriend;
-		if (data.camera_boyfriend == null) data.camera_boyfriend = template.camera_boyfriend.copy();
-		if (data.camera_opponent == null) data.camera_opponent = template.camera_opponent.copy();
-		if (data.camera_girlfriend == null) data.camera_girlfriend = template.camera_girlfriend.copy();
+		if (data.camera_boyfriend == null) data.camera_boyfriend = [0, 0];
+		if (data.camera_opponent == null) data.camera_opponent = [0, 0];
+		if (data.camera_girlfriend == null) data.camera_girlfriend = [0, 0];
 		if (data.camera_speed == null) data.camera_speed = template.camera_speed;
 
 		return cast data;
