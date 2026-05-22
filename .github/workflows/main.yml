@@ -1,8 +1,8 @@
-# This is a basic workflow to help you get started with Actions
+# THE FOLLOWING ACTIONS CODE IS FROM THE PSYCH ENGINE REPO: https://github.com/ShadowMario/FNF-PsychEngine/blob/main/.github/workflows/main.yml
 
 name: Build
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   push:
     branches:
@@ -10,39 +10,27 @@ on:
   pull_request:
     branches:
       - main
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-  # For release builds
-  workflow_call:
-    inputs:
-      buildFlags:
-        required: false
-        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   buildLinux:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4.1.7
 
       - uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.7
-      # Runs a set of commands using the runners shell
+          haxe-version: 4.3.4
       - name: install libvlc
         run: |
             sudo apt-get update
             sudo apt-get install -y vlc libvlc-dev libvlccore-dev vlc-bin libasound2-dev libpulse-dev libx11-dev
       - name: Install libraries
         run: |
+          sudo apt-get install libvlc-dev libvlccore-dev glibc-source libidn-dev libidn12
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null
           haxelib install hxpkg
@@ -51,22 +39,25 @@ jobs:
       - name: Compile
         run: haxelib run lime build Project.xml linux -D ${{ inputs.buildFlags || 'commit' }}
       - name: Publish Artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
-          name: nmv-linux
-          path: 'export/release/linux/bin' 
+          name: linuxBuild
+          path: 'export/release/linux/bin'
   buildWindows:
     runs-on: windows-latest
-    
+
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2.3.0
+      - uses: actions/checkout@v4.1.7
 
       - uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.7
-      # Runs a set of commands using the runners shell
-      - name: Install libraries
+          haxe-version: 4.3.4
+      - name: Setup Haxe Path
+        run: |
+          setx HAXEPATH "C:\HaxeToolkit\haxe"
+          setx PATH "%HAXEPATH%;%PATH%"
+      - name: Install Haxelib
         run: |
           haxelib setup C:/haxelib
           haxelib install hxcpp > nul
@@ -76,38 +67,50 @@ jobs:
       - name: Compile
         run: haxelib run lime build windows -D ${{ inputs.buildFlags || 'commit' }}
       - name: Publish Artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
-          name: nmv-windows
+          name: windowsBuild
           path: export/release/windows/bin
-  buildMacIntel:
-    runs-on: macos-15
+  buildMac:
+    runs-on: macos-12
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v4.1.7
 
       - uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.7
-      # Runs a set of commands using the runners shell
-      - name: Install libraries
+          haxe-version: 4.3.4
+      - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
-          haxelib install hxcpp > /dev/null --quiet
-          haxelib install hxpkg
+          haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp
+          haxelib install thx.core
+          haxelib install thx.semver
+          haxelib install lime
+          haxelib install openfl
+          haxelib install flixel 5.2.2
+          haxelib install flixel-tools 1.5.1
+          haxelib install flixel-ui 2.5.0
+          haxelib install flixel-addons 2.11.0
+          haxelib install flxanimate
+          haxelib install json2object
+          haxelib git polymod https://github.com/PabloelproxD210/Polymod.git
+          haxelib git hscript https://github.com/T5mpler/hscript-dnb
+          haxelib install hxvlc 2.2.5
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
+          haxelib install hxpkg --global
+          haxelib run hxpkg setup --global
           haxelib run hxpkg install
           git -C .haxelib/lime/git submodule update --init --recursive
-          find .haxelib/lime/git -path '*/lib/png/pngpriv.h' -exec perl -0pi -e 's/#\s*include <fp\.h>/# include <math.h>/g' {} \;
+          find .haxelib/lime/git -path '*/lib/png/pngpriv.h' -exec perl -0pi -e 's/#\s*include <fp\.h>/# include <math.h>/g' {} \
       - name: Compile
-        run: |
-          haxelib run lime build mac -64 -D ${{ inputs.buildFlags || 'commit' }} -D HXCPP_M64
+        run: haxelib run lime build mac --app-version="4.0.0-${{ github.run_id}}"
       - name: Publish Artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
           name: nmv-macIntel
           path: export/release/macos/bin
-
   buildMacArm:
     runs-on: macos-15
 
@@ -118,7 +121,6 @@ jobs:
       - uses: krdlab/setup-haxe@master
         with:
           haxe-version: 4.3.7
-      # Runs a set of commands using the runners shell
       - name: Install libraries
         run: |
           haxelib setup ~/haxelib
@@ -126,7 +128,7 @@ jobs:
           haxelib install hxpkg
           haxelib run hxpkg install
           git -C .haxelib/lime/git submodule update --init --recursive
-          find .haxelib/lime/git -path '*/lib/png/pngpriv.h' -exec perl -0pi -e 's/#\s*include <fp\.h>/# include <math.h>/g' {} \;
+          find .haxelib/lime/git -path '*/lib/png/pngpriv.h' -exec perl -0pi -e 's/#\s*include <fp\.h>/# include <math.h>/g' {} \
       - name: Compile
         run: |
           haxelib run lime build mac -arm64 -D ${{ inputs.buildFlags || 'commit' }} -D HXCPP_ARM64
