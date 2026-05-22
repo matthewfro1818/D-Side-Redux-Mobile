@@ -225,7 +225,26 @@ class StageData
 		var path = getStageFromDir('data/stages', stage);
 		if (!FunkinAssets.exists(path, TEXT)) path = getStageFromDir('stages', stage);
 		
-		return FunkinAssets.exists(path, TEXT) ? cast FunkinAssets.parseJson5(FunkinAssets.getContent(path)) : null;
+		return FunkinAssets.exists(path, TEXT) ? normalizeStageFile(FunkinAssets.parseJson5(FunkinAssets.getContent(path))) : null;
+	}
+
+	static function normalizeStageFile(data:Dynamic):StageFile
+	{
+		final template = getTemplateStageFile();
+		if (data == null) return template;
+
+		if (data.defaultZoom == null) data.defaultZoom = template.defaultZoom;
+		if (data.isPixelStage == null) data.isPixelStage = template.isPixelStage;
+		if (data.boyfriend == null) data.boyfriend = template.boyfriend.copy();
+		if (data.girlfriend == null) data.girlfriend = template.girlfriend.copy();
+		if (data.opponent == null) data.opponent = template.opponent.copy();
+		if (data.hide_girlfriend == null) data.hide_girlfriend = template.hide_girlfriend;
+		if (data.camera_boyfriend == null) data.camera_boyfriend = template.camera_boyfriend.copy();
+		if (data.camera_opponent == null) data.camera_opponent = template.camera_opponent.copy();
+		if (data.camera_girlfriend == null) data.camera_girlfriend = template.camera_girlfriend.copy();
+		if (data.camera_speed == null) data.camera_speed = template.camera_speed;
+
+		return cast data;
 	}
 	
 	public static function getTemplateStageFile():StageFile return
