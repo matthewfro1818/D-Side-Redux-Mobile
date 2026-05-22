@@ -20,9 +20,6 @@ import funkin.backend.PlayerSettings;
 import flixel.addons.transition.FlxTransitionableState;
 
 import funkin.states.transitions.ScriptedTransition;
-import funkin.audio.visualize.PolygonSpectogram;
-import funkin.audio.visualize.PolygonSpectogram.VISTYPE;
-import funkin.audio.visualize.SpectogramSprite.SPECDIRECTION;
 import funkin.api.DiscordClient;
 
 var controls = PlayerSettings.player1.controls;
@@ -34,7 +31,6 @@ var titleText:FlxSprite;
 var bgColor:FlxSprite;
 var bgDoodles:FlxSprite;
 var introTxt:FlxText;
-var viz:PolygonSpectogram;
 var skippedIntro:Bool = false;
 var colorTween:FlxTween;
 
@@ -130,17 +126,6 @@ function onLoad()
 		FunkinSound.playMusic(Paths.music('freakyMenu'), 0.45);
 		Conductor.bpm = 102;
 		onBeatHit();
-		
-		viz = new PolygonSpectogram(FlxG.sound.music, FlxColor.WHITE, 1280, 2, SPECDIRECTION.HORIZONTAL);
-		viz.waveAmplitude = 720 / 4;
-		viz.thickness = 4;
-		viz.y = 720 / 2;
-		viz.color = 0xFF525252;
-		viz.alpha = 0.6;
-		viz.zIndex = 1;
-		add(viz);
-		
-		refreshZ();
 	});
 	
 	randChoice = flavorText[FlxG.random.int(0, flavorText.length - 1)];
@@ -160,7 +145,6 @@ function onLoad()
 	dance.scale.set(0.45, 0.45);
 	dance.updateHitbox();
 	dance.antialiasing = true;
-	dance.zIndex = 2;
 	add(dance);
 	
 	logo = new FlxSprite().loadGraphic(Paths.image('menus/logo'));
@@ -169,7 +153,6 @@ function onLoad()
 	logo.screenCenter(FlxAxes.Y);
 	logo.visible = false;
 	logo.antialiasing = true;
-	logo.zIndex = 3;
 	add(logo);
 	
 	titleText = new FlxSprite();
@@ -182,7 +165,6 @@ function onLoad()
 	titleText.animation.play('idle');
 	titleText.updateHitbox();
 	titleText.visible = false;
-	titleText.zIndex = 4;
 	add(titleText);
 	
 	bgColor = new FlxSprite().makeGraphic(1280, 720, 0xFFaa11fc);
@@ -195,7 +177,6 @@ function onLoad()
 	bgDoodles.screenCenter();
 	bgDoodles.color = 0xFFf6ccff;
 	bgDoodles.alpha = 0;
-	bgDoodles.zIndex = 0;
 	add(bgDoodles);
 	
 	introTxt = new FlxText();
@@ -205,7 +186,6 @@ function onLoad()
 	introTxt.antialiasing = true;
 	introTxt.screenCenter();
 	introTxt.visible = false;
-	introTxt.zIndex = 2;
 	add(introTxt);
 	
 	var songtxt = PluginsManager.callPluginFunc('Utils', 'menuIntroCard', ["Gettin' Freaky", 'Philiplol, selora789', [24, 7]]);
@@ -221,7 +201,6 @@ var entered = false;
 function onEnter()
 {
 	ScriptedTransition.setTransition('SimpleSticker');
-	if (viz != null) viz.color = 0xFFaa11fc;
 	entered = true;
 	FlxG.sound.play(Paths.sound('confirmMenu'));
 	FlxG.camera.flash(FlxColor.WHITE, 1);
@@ -273,6 +252,7 @@ function onUpdate(elapsed)
  */
 function changeTxt(text:String)
 {
+	if (introTxt == null) return;
 	introTxt.text = text;
 	introTxt.screenCenter();
 }
@@ -347,8 +327,7 @@ function skipIntro()
 		skippedIntro = true;
 		FlxTween.cancelTweensOf(FlxG.camera);
 		FlxG.camera.zoom = 1;
-		if (viz != null) viz.color = 0xFF1fcd4d;
-		
+
 		FlxTween.cancelTweensOf(bgColor);
 		FlxTween.cancelTweensOf(bgDoodles);
 		bgColor.alpha = 0;

@@ -54,6 +54,9 @@ function onLoad() {
 	} else
 		stickerChoice = FlxG.save.data.stickerChoice;
 
+	if (stickerChoice == null || stickerChoice == '')
+		stickerChoice = 'greenfriend';
+
 	cell = stickerChoice == 'greencell';
 
 	var scale = [1, 1];
