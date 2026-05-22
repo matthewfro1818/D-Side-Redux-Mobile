@@ -12,6 +12,8 @@ typedef SwagSection =
 	var altAnim:Bool;
 }
 
+typedef SongSection = SwagSection;
+
 typedef SwagSong =
 {
 	var song:String;
@@ -32,4 +34,8 @@ typedef SwagSong =
 	
 	var arrowSkin:String;
 	var splashSkin:String;
+	var ?arrowSkins:Array<String>;
+	var ?format:String;
 }
+
+typedef Song = SwagSong;

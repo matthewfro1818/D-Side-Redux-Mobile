@@ -15,9 +15,6 @@ import funkin.utils.CoolUtil;
 import funkin.scripting.PluginsManager;
 import flixel.addons.transition.FlxTransitionableState;
 
-import mobile.controls.MobileDPadMode;
-import mobile.controls.MobileActionMode;
-
 var controls = PlayerSettings.player1.controls;
 
 var allowControls = false;
@@ -161,15 +158,19 @@ function onCreate() {
 	add(port);
 	FlxTween.tween(port, {x: (FlxG.width - port.width)}, 0.5, {ease: FlxEase.quintOut});
 	
-	addVirtualPad(MobileDPadMode.UP_DOWN, MobileActionMode.A_B);
-	virtualPad.buttonUp.x = virtualPad.buttonDown.x -= 200;
-	virtualPad.buttonUp.y = virtualPad.buttonDown.y -= 350;
-	virtualPad.buttonA.x = virtualPad.buttonB.x += FlxG.width;
-	//virtualPad.buttonA.y = virtualPad.buttonB.y += 325;
-	FlxTween.tween(virtualPad.buttonUp, {alpha: 0.5, x: 0, y: FlxG.height - 255}, 0.3, {ease: FlxEase.quintOut, startDelay: (0.05 * 1)});
-	FlxTween.tween(virtualPad.buttonDown, {alpha: 0.5, x: 0, y: FlxG.height - 135}, 0.3, {ease: FlxEase.quintOut, startDelay: (0.05 * 2)});
-	FlxTween.tween(virtualPad.buttonA, {x: FlxG.width - 132}, 0.5, {ease: FlxEase.quintOut, startDelay: (0.05 * 1)});
-	FlxTween.tween(virtualPad.buttonB, {x: FlxG.width - 258}, 0.5, {ease: FlxEase.quintOut, startDelay: (0.05 * 2)});
+	var dpadMode = Type.createEnum(Type.resolveEnum('mobile.controls.MobileDPadMode'), 'UP_DOWN');
+	var actionMode = Type.createEnum(Type.resolveEnum('mobile.controls.MobileActionMode'), 'A_B');
+	addVirtualPad(dpadMode, actionMode);
+	if (virtualPad != null) {
+		virtualPad.buttonUp.x = virtualPad.buttonDown.x -= 200;
+		virtualPad.buttonUp.y = virtualPad.buttonDown.y -= 350;
+		virtualPad.buttonA.x = virtualPad.buttonB.x += FlxG.width;
+		//virtualPad.buttonA.y = virtualPad.buttonB.y += 325;
+		FlxTween.tween(virtualPad.buttonUp, {alpha: 0.5, x: 0, y: FlxG.height - 255}, 0.3, {ease: FlxEase.quintOut, startDelay: (0.05 * 1)});
+		FlxTween.tween(virtualPad.buttonDown, {alpha: 0.5, x: 0, y: FlxG.height - 135}, 0.3, {ease: FlxEase.quintOut, startDelay: (0.05 * 2)});
+		FlxTween.tween(virtualPad.buttonA, {x: FlxG.width - 132}, 0.5, {ease: FlxEase.quintOut, startDelay: (0.05 * 1)});
+		FlxTween.tween(virtualPad.buttonB, {x: FlxG.width - 258}, 0.5, {ease: FlxEase.quintOut, startDelay: (0.05 * 2)});
+	}
 
 	FlxTimer.wait(0.5, () -> {
 		changeSelection(0);

@@ -966,6 +966,20 @@ class PlayState extends MusicBeatState
 		NoteSkinHelper.arrowSkins = [noteSkin.data.playerSkin, noteSkin.data.opponentSkin];
 		if (SONG.lanes > 2) for (i in 2...SONG.lanes)
 			NoteSkinHelper.arrowSkins.push(noteSkin.data.extraSkin);
+
+		if (SONG.arrowSkins != null && SONG.arrowSkins.length > 0)
+		{
+			for (i in 0...SONG.lanes)
+			{
+				final laneSkin = SONG.arrowSkins[i];
+				if (laneSkin != null && laneSkin.length > 0 && laneSkin != 'default')
+				{
+					while (NoteSkinHelper.arrowSkins.length <= i)
+						NoteSkinHelper.arrowSkins.push(noteSkin.data.extraSkin);
+					NoteSkinHelper.arrowSkins[i] = laneSkin;
+				}
+			}
+		}
 			
 		for (i in 0...SONG.keys)
 		{

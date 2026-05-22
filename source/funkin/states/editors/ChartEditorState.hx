@@ -345,6 +345,8 @@ class ChartEditorState extends MusicBeatState
 					needsVoices: true,
 					arrowSkin: 'default',
 					splashSkin: 'noteSplashes',
+					arrowSkins: ['default', 'default'],
+					format: 'nmv2',
 					player1: 'bf',
 					player2: 'bf',
 					gfVersion: 'gf',
@@ -3914,11 +3916,15 @@ class ChartEditorState extends MusicBeatState
 		
 		if ((data != null) && (data.length > 0))
 		{
+			#if mobile
+			StorageSystem.saveContent(Paths.sanitize(_song.song), ".json", data.trim());
+			#else
 			_file = new FileReference();
 			_file.addEventListener(Event.COMPLETE, onSaveComplete);
 			_file.addEventListener(Event.CANCEL, onSaveCancel);
 			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
 			_file.save(data.trim(), Paths.sanitize(_song.song) + ".json");
+			#end
 		}
 	}
 	
@@ -3943,11 +3949,15 @@ class ChartEditorState extends MusicBeatState
 		
 		if ((data != null) && (data.length > 0))
 		{
+			#if mobile
+			StorageSystem.saveContent("events", ".json", data.trim());
+			#else
 			_file = new FileReference();
 			_file.addEventListener(Event.COMPLETE, onSaveComplete);
 			_file.addEventListener(Event.CANCEL, onSaveCancel);
 			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
 			_file.save(data.trim(), "events.json");
+			#end
 		}
 	}
 	

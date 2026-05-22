@@ -29,7 +29,6 @@ class Chart
 	 */
 	public static function fromPath(path:String):SwagSong
 	{
-		path = Paths.sanitize(path);
 		if (!FunkinAssets.exists(path))
 		{
 			throw 'couldnt find chart at ($path)';
@@ -48,12 +47,11 @@ class Chart
 	{
 		songName = Paths.sanitize(songName);
 		
-		final path = Paths.json('$songName/data/${Difficulty.getDifficultyFilePath(difficulty)}');
+		var path = Paths.json('$songName/charts/${Difficulty.getDifficultyFilePath(difficulty)}');
 		
-		if (!FunkinAssets.exists(path))
-		{
-			throw 'couldnt find chart at ($path)';
-		}
+		if (!FunkinAssets.exists(path)) path = Paths.json('$songName/data/${Difficulty.getDifficultyFilePath(difficulty)}');
+		
+		if (!FunkinAssets.exists(path)) throw 'couldnt find chart at ($path)';
 		
 		return fromData(FunkinAssets.parseJson(FunkinAssets.getContent(path)));
 	}
@@ -107,6 +105,15 @@ class Chart
 		
 		if (songJson.keys == null) songJson.keys = 4;
 		if (songJson.lanes == null) songJson.lanes = 2;
+		if (songJson.arrowSkin == null) songJson.arrowSkin = '';
+		if (songJson.splashSkin == null) songJson.splashSkin = '';
+		if (songJson.arrowSkins == null || songJson.arrowSkins.length == 0)
+		{
+			songJson.arrowSkins = [];
+			final fallbackSkin:String = (songJson.arrowSkin != null && songJson.arrowSkin.length > 0) ? songJson.arrowSkin : 'default';
+			for (i in 0...songJson.lanes)
+				songJson.arrowSkins.push(fallbackSkin);
+		}
 		
 		final sectionsData:Array<SwagSection> = songJson.notes;
 		
@@ -148,7 +155,24 @@ class Chart
 			songJson.events = events;
 		}
 		
-		if (sectionsData == null) return;
+		if (sectionsData == null)
+		{
+			songJson.notes = [];
+			return;
+		}
+		
+		if (songJson.format != 'psych_v1' && songJson.format != 'nmv2')
+		{
+			songJson.format = 'nmv2';
+			
+			for (section in sectionsData)
+			{
+				for (note in section.sectionNotes)
+				{
+					if (note[1] >= 0 && note[1] < (songJson.keys * 2) && !section.mustHitSection) note[1] = Std.int((note[1] + songJson.keys) % (songJson.keys * 2));
+				}
+			}
+		}
 		
 		for (section in sectionsData)
 		{

@@ -129,11 +129,12 @@ class Paths
 	/**
 	 * Searches for a video file wihin the `videos` directory.
 	 * 
-	 * Automatically will attempt to append .mp4 and .mov extensions.
+	 * Automatically will attempt to append .mp4, .mov, and .webm extensions.
 	 */
-	public static function video(key:String, checkMods:Bool = true):String
+	public static function video(key:String, ?ext:String, checkMods:Bool = true):String
 	{
-		return findFileWithExts('videos/$key', ['mp4', 'mov'], null, checkMods);
+		final exts = ext != null ? [ext, 'mp4', 'mov', 'webm'] : ['mp4', 'mov', 'webm'];
+		return findFileWithExts('videos/$key', exts, null, checkMods);
 	}
 	
 	public static function textureAtlas(key:String, ?parentFolder:String, checkMods:Bool = true):String
@@ -335,6 +336,7 @@ class Paths
 		
 		final xmlPath = getPath('images/$key.xml', parentFolder, checkMods);
 		final txtPath = getPath('images/$key.txt', parentFolder, checkMods);
+		final jsonPath = getPath('images/$key.json', parentFolder, checkMods);
 		
 		final graphic = image(key, parentFolder, allowGPU, checkMods);
 		
@@ -348,6 +350,13 @@ class Paths
 				if (frames != null) tempAtlasFramesCache.set(directPath, frames);
 				return frames;
 			}
+		}
+
+		if (FunkinAssets.exists(jsonPath))
+		{
+			final frames = FlxAtlasFrames.fromAseprite(graphic, FunkinAssets.getContent(jsonPath));
+			if (frames != null) tempAtlasFramesCache.set(directPath, frames);
+			return frames;
 		}
 		
 		@:nullSafety(Off) // until flixel does null safety
@@ -457,7 +466,7 @@ class Paths
 	 */
 	public static inline function mods(key:String = ''):String
 	{
-		return '$MODS_DIRECTORY/' + key;
+		return #if mobile StorageSystem.getDirectory() + #end '$MODS_DIRECTORY/' + key;
 	}
 	
 	#if MODS_ALLOWED

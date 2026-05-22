@@ -38,6 +38,22 @@ import funkin.states.*;
 import funkin.objects.BGSprite;
 import funkin.backend.MusicBeatState;
 
+#if mobile
+import mobile.backend.StorageSystem;
+import mobile.backend.utils.TouchUtil;
+import mobile.backend.utils.PopUp;
+#end
+
+#if android
+import extension.androidtools.os.Environment;
+import extension.androidtools.Settings;
+import extension.androidtools.Permissions;
+import extension.androidtools.os.Build.VERSION;
+import extension.androidtools.os.Build.VERSION_CODES;
+import extension.androidtools.Tools;
+import lime.system.JNI;
+#end
+
 using flixel.util.FlxArrayUtil;
 
 using extensions.flixel.FlxCameraTools;
